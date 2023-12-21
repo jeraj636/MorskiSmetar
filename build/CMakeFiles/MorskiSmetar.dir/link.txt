@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/MorskiSmetar.dir/src/test.cpp.o -o MorskiSmetar  src/HenigmaEngine/libHenigmaEngine.a src/HenigmaEngine/src/glfw/src/libglfw3.a /usr/lib/librt.a -lm -ldl -lGL -lfmt -lsfml-audio -lsfml-system 
