@@ -1,19 +1,20 @@
 #include "HenigmaEngine/HenigmaEngine.h"
 #include "Scene/Zacetna.h"
+#include "Scene/IzbiraSlota.h"
+
 int main()
 {
     Risalnik::Init("Morski smetar");
-    Risalnik::odzadje = 0xffff00ff;
+    Risalnik::odzadje = 0x5b6ee1ff;
     Risalnik::sredstvaPath = "../Sredstva";
 
-    Zacetna sc;
+    IzbiraSlota izbiraSlota;
+    Zacetna sc(&izbiraSlota);
     Risalnik::aktivnaScena = &sc;
     Risalnik::aktivnaScena->Zacetek();
-    std::cout << "tukaj sem4" << std::endl;
     while (!Risalnik::AliSeMoramZapreti())
     {
         Risalnik::ZacetekFrame();
-        Risalnik::aktivnaScena->Zanka();
         Risalnik::KonecFrame();
     }
     Risalnik::Konec();

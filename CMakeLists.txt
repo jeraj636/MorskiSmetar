@@ -8,6 +8,6 @@ add_executable(${PROJECT_NAME}
     ../src/test.cpp 
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${PROJECT_NAME} 
 HenigmaEngine
 )
