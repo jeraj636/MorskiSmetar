@@ -1,0 +1,1 @@
+ src/HenigmaEngine/libHenigmaEngine.a src/HenigmaEngine/src/glfw/src/libglfw3.a -lopengl32 src/HenigmaEngine/src/fmt/libfmt.a -lsfml-audio -lsfml-system -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
