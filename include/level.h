@@ -10,6 +10,13 @@ public:
     void konec() override;
 
 private:
+    CelicniAvtomat m_zemljevid;
+
+    Ploscice m_obala;
+    Ploscice m_otoki;
+    uint32_t m_ploscice_tekstura;
+
+    Zvok m_muzika;
 };
 
 #endif
