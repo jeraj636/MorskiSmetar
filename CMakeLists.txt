@@ -9,7 +9,9 @@ project(MorskiSmetar)
 add_subdirectory(lib/HenigmaEngine)
 
 add_executable(${PROJECT_NAME}
-../src/main.cpp
+src/main.cpp
+src/zacetna.cpp
+src/level.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
