@@ -1,0 +1,7 @@
+[submodule "lib/HenigmaEngine"]
+	path = lib/HenigmaEngine
+	url = https://github.com/jeraj636/HenigmaEngine
+[submodule "lib/CelicniAvtomat"]
+	path = lib/CelicniAvtomat
+	url = https://github.com/jeraj636/CelicniAvtomat
+	branch = MorskiSmetar
