@@ -12,6 +12,9 @@ add_executable(${PROJECT_NAME}
 src/main.cpp
 src/zacetna.cpp
 src/level.cpp
+src/vegovec.cpp
+src/ladja.cpp
+src/tocke.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
