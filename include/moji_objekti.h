@@ -13,27 +13,24 @@ class Objekt_vegovec : public Objekt_anim
 {
 public:
     static void init();
-    void nastavi();
+    void nastavi(CelicniAvtomat *zemljeveid);
+    void update();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
     static inline uint32_t m_hoja_tek_id[4];
     static inline uint32_t m_udarec_tek_id[10];
-};
-
-class Objekt_ladja : public Objekt
-{
-public:
-    static void init();
-    void nastavi(CelicniAvtomat *zemljevid);
-    void update();
+    static inline uint32_t m_plavanje_tek_id[2];
+    static inline uint32_t m_plavanje_udraec_tek_id[10];
+    static inline float m_hitrost;
 
 private:
-    static inline uint32_t m_ladja_tek_id;
+    void premakni();
+
+private:
     CelicniAvtomat *m_zemljevid;
-
-private:
-    bool trk(char c);
+    bool m_sem_v_vodi;
+    mat::vec2 m_smer;
 };
 
 #endif

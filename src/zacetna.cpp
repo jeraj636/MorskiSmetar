@@ -21,6 +21,8 @@ void Zacetna::zacetek()
     m_igraj_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/igraj_gumb.png");
     m_izhod_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
     m_izhod_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
+    m_igraj_gumb.aktiven = true;
+    m_izhod_gumb.aktiven = true;
 }
 
 void Zacetna::zanka()

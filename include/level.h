@@ -24,8 +24,6 @@ private:
     Zvok m_muzika;
 
     Objekt_vegovec m_vegovec;
-
-    Objekt_ladja m_ladja;
 };
 
 #endif
