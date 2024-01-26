@@ -13,6 +13,7 @@ public:
     void zacetek() override;
     void zanka() override;
     void konec() override;
+    Scena *zacetna;
 
 private:
     CelicniAvtomat m_zemljevid;
@@ -24,6 +25,8 @@ private:
     Zvok m_muzika;
 
     Objekt_vegovec m_vegovec;
+
+    std::vector<Objekt_crnc *> m_crnci;
 };
 
 #endif

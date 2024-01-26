@@ -45,7 +45,6 @@ void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
     aktiven = true;
     barva_objekta = 0xffffffff;
     barva_odzadja = 0;
-
     trenutna_animacija = 0;
 
     m_zemljevid = zemljeveid;
@@ -63,7 +62,7 @@ void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
 
     tmp.tekstura_id = std::vector<uint32_t>{m_udarec_tek_id[0], m_udarec_tek_id[1], m_udarec_tek_id[2], m_udarec_tek_id[3], m_udarec_tek_id[4], m_udarec_tek_id[5], m_udarec_tek_id[6], m_udarec_tek_id[7], m_udarec_tek_id[8], m_udarec_tek_id[9]};
     tmp.perioda = 0.04f;
-    tmp.naslednja_animacija = 1;
+    tmp.naslednja_animacija = 0;
     animacije.push_back(tmp);
 
     tmp.tekstura_id = std::vector<uint32_t>{m_plavanje_tek_id[0], m_plavanje_tek_id[1]};
@@ -75,6 +74,7 @@ void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
     tmp.perioda = 0.04f;
     tmp.naslednja_animacija = 3;
     animacije.push_back(tmp);
+    id_teksture = animacije[0].tekstura_id[0];
 }
 
 void Objekt_vegovec::update()
@@ -118,6 +118,12 @@ void Objekt_vegovec::update()
                     trenutna_animacija = 0;
                 else
                     trenutna_animacija = 1;
+            }
+            if (pozicija.x < 0 || pozicija.x >= Risalnik::get_velikost_okna().x || pozicija.y < 0 || pozicija.y > Risalnik::get_velikost_okna().y - 20)
+            {
+
+                pozicija = mat::vec2(pozicija.x + m_hitrost * -m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
+                pozicija = mat::vec2(pozicija.x + m_hitrost * -m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
             }
         }
     }

@@ -16,6 +16,8 @@ int main()
     Zacetna zacetna(&level);
     zacetna.zacetek();
 
+    level.zacetna = &zacetna;
+
     Risalnik::aktivna_scena = &zacetna;
 
     while (!Risalnik::ali_se_moram_zapreti())

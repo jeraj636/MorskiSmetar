@@ -13,9 +13,11 @@ void Zacetna::zacetek()
     m_obala.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '.', m_zemljevid_tek_id, 0xfbe790ff);
     m_otoki.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '0', m_zemljevid_tek_id, 0x03ac13ff);
 
-    m_glasba.nastavi("../../sredstva/zvok/theme.mp3");
-    m_glasba.nastavi_loop(true);
-    m_glasba.predvajaj();
+    /*
+        m_glasba.nastavi("../../sredstva/zvok/theme.mp3");
+        m_glasba.nastavi_loop(true);
+        m_glasba.predvajaj();
+        */
 
     m_igraj_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2, 600), mat::vec2(100, 100), 0, 0xffffffff, 0);
     m_igraj_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/igraj_gumb.png");

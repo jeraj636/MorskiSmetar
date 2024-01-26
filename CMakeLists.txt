@@ -14,6 +14,7 @@ src/zacetna.cpp
 src/level.cpp
 src/vegovec.cpp
 src/tocke.cpp
+src/crnc.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
