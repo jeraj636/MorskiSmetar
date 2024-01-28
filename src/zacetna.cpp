@@ -60,7 +60,7 @@ void Zacetna::zanka()
     {
         m_izhod_gumb.barva_objekta.set_a(0xff);
     }
-    Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), 1080 - 400, 400, "Morski smetar");
+    Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "Morski smetar");
 }
 
 void Zacetna::konec()

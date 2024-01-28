@@ -11,14 +11,14 @@ void Objekt_crnc::init()
     m_hoja_tek_id[3] = Risalnik::nalozi_teksturo("zapecenec/hoja/hoja4.png");
 
     m_plavanje_tek_id[0] = Risalnik::nalozi_teksturo("zapecenec/plavanje/plavanje1.png");
-    m_plavanje_tek_id[1] = Risalnik::nalozi_teksturo("zapecenec/plavanje/plavanje1.png");
+    m_plavanje_tek_id[1] = Risalnik::nalozi_teksturo("zapecenec/plavanje/plavanje2.png");
 }
 
 void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
 {
     m_zemljevid = zemljevid;
     velikost = mat::vec2(32, 64);
-    pozicija = mat::vec2(rand() % (int)Risalnik::get_velikost_okna().x, rand() % (int)Risalnik::get_velikost_okna().y);
+    pozicija = mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 40) + 20, rand() % ((int)Risalnik::get_velikost_okna().y - 40) + 20);
     rotacija = 180;
     aktiven = true;
     barva_objekta = 0xffffffff;
@@ -41,16 +41,40 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     animacije.push_back(tmp);
 }
 
-void Objekt_crnc::update()
+void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece)
 {
-    if (pozicija.x < 0 || pozicija.x > Risalnik::get_velikost_okna().x || pozicija.y < 0 || pozicija.y > Risalnik::get_velikost_okna().y || m_naslednji_cas <= Cas::get_time())
+    mat::vec2 trkalnik_vel(32, 10);
+    mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
+
+    if (m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, ',') || m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, '0'))
+        m_sem_v_vodi = false;
+    else
+        m_sem_v_vodi = true;
+
+    if (m_sem_v_vodi)
+    {
+        trenutna_animacija = 2;
+    }
+    else
+    {
+        trenutna_animacija = 1;
+    }
+
+    if (pozicija.x < 20 || pozicija.x > Risalnik::get_velikost_okna().x - 20 || pozicija.y < 20 || pozicija.y > Risalnik::get_velikost_okna().y - 20 || m_naslednji_cas <= Cas::get_time())
     {
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         rand_smer();
         m_naslednji_cas = Cas::get_time() + rand() % 10;
+
+        smece.push_back(new Objekt_smeti);
+        smece.back()->nastavi(m_zemljevid, pozicija);
+        smece.back()->update();
     }
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
+
+    if ((velikost.x > 0 && m_smer.x > 0) || (velikost.x < 0 && m_smer.x < 0))
+        velikost.x *= -1;
 }
 
 void Objekt_crnc::rand_smer()

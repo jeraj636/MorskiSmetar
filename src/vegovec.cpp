@@ -2,7 +2,6 @@
 
 void Objekt_vegovec::init()
 {
-    m_hitrost = 100;
 
     m_idle_tek_id[0] = Risalnik::nalozi_teksturo("vegovec/idle/idle1.png");
     m_idle_tek_id[1] = Risalnik::nalozi_teksturo("vegovec/idle/idle2.png");
@@ -39,7 +38,8 @@ void Objekt_vegovec::init()
 }
 void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
 {
-    pozicija = mat::vec2(rand() % (int)Risalnik::get_velikost_okna().x, rand() % (int)Risalnik::get_velikost_okna().y);
+    pozicija = mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 40) + 20, rand() % ((int)Risalnik::get_velikost_okna().y - 40) + 20);
+
     velikost = mat::vec2(32, 64);
     rotacija = 180;
     aktiven = true;

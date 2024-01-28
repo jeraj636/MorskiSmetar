@@ -27,6 +27,12 @@ private:
     Objekt_vegovec m_vegovec;
 
     std::vector<Objekt_crnc *> m_crnci;
+    std::vector<Objekt_smeti *> m_smeti;
+    std::vector<Objekt_greta *> m_grete;
+    Font m_pisava;
+
+    int m_tocke;
+    double m_next_tocek_odboj;
 };
 
 #endif
