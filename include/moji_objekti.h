@@ -10,6 +10,9 @@ public:
     static void init();
     void nastavi(CelicniAvtomat *zemljeveid);
     void update(std::vector<Objekt_smeti *> &smece);
+    bool ali_zivim;
+    bool sem_pokopan;
+    void smrt();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
@@ -17,6 +20,8 @@ private:
     static inline uint32_t m_plavanje_tek_id[2];
     CelicniAvtomat *m_zemljevid;
     static inline float m_hitrost = 150;
+    static inline uint32_t m_grob_tekstura;
+    static inline uint32_t m_duh_tekstura;
 
 private:
     mat::vec2 m_smer;
@@ -81,22 +86,29 @@ public:
     static void init();
     void nastavi(CelicniAvtomat *zemljeveid, std::vector<Objekt_smeti *> &smece);
     void update(std::vector<Objekt_smeti *> &smece, int &tocke);
+    bool ali_zivim;
+    bool sem_pokopan;
+    void smrt();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
     static inline uint32_t m_hoja_tek_id[4];
     static inline uint32_t m_plavanje_tek_id[2];
     CelicniAvtomat *m_zemljevid;
-    static inline float m_hitrost = 300;
+    static inline float m_hitrost = 140;
+    static inline uint32_t m_grob_tekstura;
+    static inline uint32_t m_duh_tekstura;
 
 private:
     mat::vec2 m_smer;
     bool m_sem_v_vodi;
     int m_trenutna_smet;
+    double m_next_time;
 
 private:
     void nastavi_smer(Objekt_smeti *t);
     bool sem_zunaj();
+    void rand_smer();
 };
 
 #endif

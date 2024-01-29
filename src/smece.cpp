@@ -15,6 +15,7 @@ void Objekt_smeti::nastavi(CelicniAvtomat *zemljeveid, mat::vec2 poz)
     barva_odzadja = 0;
     m_zemljevid = zemljeveid;
     m_sem_v_vodi = !(trk('.') || trk('0'));
+    aktiven = true;
     rand_smer();
 }
 bool Objekt_smeti::trk(char c)

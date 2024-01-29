@@ -12,6 +12,9 @@ void Objekt_crnc::init()
 
     m_plavanje_tek_id[0] = Risalnik::nalozi_teksturo("zapecenec/plavanje/plavanje1.png");
     m_plavanje_tek_id[1] = Risalnik::nalozi_teksturo("zapecenec/plavanje/plavanje2.png");
+
+    m_grob_tekstura = Risalnik::nalozi_teksturo("nagrobnik.png");
+    m_duh_tekstura = Risalnik::nalozi_teksturo("duh.png");
 }
 
 void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
@@ -25,6 +28,7 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     barva_odzadja = 0;
     trenutna_animacija = 0;
     Animacija tmp;
+    ali_zivim = true;
     tmp.tekstura_id = std::vector<uint32_t>{m_idle_tek_id[0], m_idle_tek_id[1]};
     tmp.perioda = .5f;
     tmp.naslednja_animacija = 0;
@@ -39,10 +43,23 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 2;
     animacije.push_back(tmp);
+
+    tmp.tekstura_id = std::vector<uint32_t>{m_grob_tekstura};
+    tmp.perioda = .1f;
+    tmp.naslednja_animacija = 3;
+    animacije.push_back(tmp);
+
+    tmp.tekstura_id = std::vector<uint32_t>{m_duh_tekstura};
+    tmp.perioda = .1f;
+    tmp.naslednja_animacija = 4;
+    animacije.push_back(tmp);
 }
 
 void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece)
 {
+    if (!ali_zivim && sem_pokopan)
+        return;
+
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
 
@@ -51,13 +68,17 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece)
     else
         m_sem_v_vodi = true;
 
-    if (m_sem_v_vodi)
+    if (ali_zivim)
     {
-        trenutna_animacija = 2;
-    }
-    else
-    {
-        trenutna_animacija = 1;
+
+        if (m_sem_v_vodi)
+        {
+            trenutna_animacija = 2;
+        }
+        else
+        {
+            trenutna_animacija = 1;
+        }
     }
 
     if (pozicija.x < 20 || pozicija.x > Risalnik::get_velikost_okna().x - 20 || pozicija.y < 20 || pozicija.y > Risalnik::get_velikost_okna().y - 20 || m_naslednji_cas <= Cas::get_time())
@@ -66,17 +87,34 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece)
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         rand_smer();
         m_naslednji_cas = Cas::get_time() + rand() % 10;
-
-        smece.push_back(new Objekt_smeti);
-        smece.back()->nastavi(m_zemljevid, pozicija);
-        smece.back()->update();
+        if (ali_zivim)
+        {
+            smece.push_back(new Objekt_smeti);
+            smece.back()->nastavi(m_zemljevid, pozicija);
+            smece.back()->update();
+        }
     }
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
 
     if ((velikost.x > 0 && m_smer.x > 0) || (velikost.x < 0 && m_smer.x < 0))
         velikost.x *= -1;
 }
-
+void Objekt_crnc::smrt()
+{
+    ali_zivim = false;
+    mat::vec2 trkalnik_vel(32, 10);
+    mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
+    if (m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, ' '))
+    {
+        trenutna_animacija = 4;
+        sem_pokopan = 0;
+    }
+    else
+    {
+        sem_pokopan = true;
+        trenutna_animacija = 3;
+    }
+}
 void Objekt_crnc::rand_smer()
 {
     float val = rand();
