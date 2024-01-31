@@ -12,7 +12,7 @@ Level::Level()
 }
 void Level::zacetek()
 {
-    m_zemljevid.Naredi(192, 108, rand() % 0xffffffff);
+    m_zemljevid.Naredi(240, 135, rand() % 0xffffffff);
 
     m_obala.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '.', m_ploscice_tekstura, 0xfbe790ff);
     m_otoki.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '0', m_ploscice_tekstura, 0x03ac13ff);

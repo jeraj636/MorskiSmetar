@@ -20,7 +20,7 @@ void Objekt_smeti::nastavi(CelicniAvtomat *zemljeveid, mat::vec2 poz)
 }
 bool Objekt_smeti::trk(char c)
 {
-    return m_zemljevid->Trk(pozicija.x, pozicija.y, velikost.x, velikost.y, c);
+    return m_zemljevid->Trk(pozicija.x, pozicija.y, velikost.x, velikost.y, c, Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y);
 }
 void Objekt_smeti::update()
 {

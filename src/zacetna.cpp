@@ -8,8 +8,7 @@ void Zacetna::zacetek()
     m_font = Risalnik::nalozi_font("FixedDays.ttf", 40);
 
     m_zemljevid_tek_id = Risalnik::nalozi_teksturo("ploscica.png");
-    m_zemljevid.Naredi(192, 108, time(NULL));
-
+    m_zemljevid.Naredi(240, 135, time(NULL));
     m_obala.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '.', m_zemljevid_tek_id, 0xfbe790ff);
     m_otoki.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '0', m_zemljevid_tek_id, 0x03ac13ff);
 
