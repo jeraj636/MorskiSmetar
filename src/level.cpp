@@ -9,10 +9,18 @@ Level::Level()
     Objekt_greta::init();
     m_pisava = Risalnik::nalozi_font("FixedDays.ttf", 40);
     m_ploscice_tekstura = Risalnik::nalozi_teksturo("ploscica.png");
+
+    m_tocke_tek = Risalnik::nalozi_teksturo("tocke.png");
+    m_ura_tek = Risalnik::nalozi_teksturo("ura.png");
 }
 void Level::zacetek()
 {
     m_zemljevid.Naredi(240, 135, rand() % 0xffffffff);
+
+    m_ura.nastavi(mat::vec2(32, 32), mat::vec2(32, 50), 180, 0xffffffff, 0);
+    m_ura.id_teksture = m_ura_tek;
+    m_tocke_obj.nastavi(mat::vec2(32, 100), mat::vec2(32, 32), 180, 0xffffffff, 0);
+    m_tocke_obj.id_teksture = m_tocke_tek;
 
     m_obala.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '.', m_ploscice_tekstura, 0xfbe790ff);
     m_otoki.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '0', m_ploscice_tekstura, 0x03ac13ff);
@@ -55,6 +63,9 @@ void Level::zanka()
 {
     m_obala.narisi_me();
     m_otoki.narisi_me();
+
+    m_ura.narisi_me();
+    m_tocke_obj.narisi_me();
 
     m_vegovec.update();
     m_vegovec.narisi_me();
@@ -105,8 +116,8 @@ void Level::zanka()
         }
     }
 
-    Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), 20, 400, std::to_string(m_tocke));
-
+    // Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), 20, 400, std::to_string(m_tocke));
+    Risalnik::narisi_niz(m_pisava, 0x000000ff, 0, mat::vec2(70, Risalnik::get_velikost_okna().y - 115), 500, std::to_string(m_tocke));
     if (Risalnik::get_tipko_tipkovnice('R'))
     {
         konec();
@@ -117,13 +128,19 @@ void Level::zanka()
     if (!je_se_kaksen_crn && m_smeti.size() == 0)
     {
         Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y / 2, 400, "BRAVO!");
-    }
+        }
     else
     {
-        Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 200, 400, std::to_string((int)floor(m_next_tocek_odboj - Cas::get_time())));
+        // Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 200, 400, std::to_string((int)floor(m_next_tocek_odboj - Cas::get_time())));
+        Risalnik::narisi_niz(m_pisava, 0x000000ff, Barva(0), mat::vec2(70, Risalnik::get_velikost_okna().y - 55), 500, std::to_string((int)floor(m_next_tocek_odboj - Cas::get_time())));
         if (m_next_tocek_odboj <= Cas::get_time())
         {
-            m_tocke -= rand() % 10;
+            if (m_tocke <= 0)
+                m_tocke -= rand() % 10;
+            else
+            {
+                m_tocke -= rand() % m_tocke / 4 * 3;
+            }
             m_next_tocek_odboj = Cas::get_time() + rand() % 10;
         }
     }
@@ -157,5 +174,5 @@ void Level::konec()
     m_smeti = std::vector<Objekt_smeti *>{};
     m_crnci = std::vector<Objekt_crnc *>{};
     m_grete = std::vector<Objekt_greta *>{};
-    std::cout << "konec2" << std::endl;
+    // std::cout << "konec2" << std::endl;
 }

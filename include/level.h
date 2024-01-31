@@ -20,11 +20,17 @@ private:
 
     Ploscice m_obala;
     Ploscice m_otoki;
+
     uint32_t m_ploscice_tekstura;
+    uint32_t m_tocke_tek;
+    uint32_t m_ura_tek;
 
     Zvok m_muzika;
 
     Objekt_vegovec m_vegovec;
+
+    Objekt m_tocke_obj;
+    Objekt m_ura;
 
     std::vector<Objekt_crnc *> m_crnci;
     std::vector<Objekt_smeti *> m_smeti;

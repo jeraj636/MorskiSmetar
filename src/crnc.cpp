@@ -106,15 +106,17 @@ void Objekt_crnc::smrt()
     ali_zivim = false;
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
-    if (m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, ' ', Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y))
-    {
-        trenutna_animacija = 4;
-        sem_pokopan = 0;
-    }
-    else
+    if (m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, ',', Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y) || m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, '0', Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y))
     {
         sem_pokopan = true;
         trenutna_animacija = 3;
+    }
+    else
+    {
+        barva_objekta.set_a(0x55);
+        sem_pokopan = false;
+        trenutna_animacija = 4;
+        velikost = mat::vec2(24, 48);
     }
 }
 void Objekt_crnc::rand_smer()
