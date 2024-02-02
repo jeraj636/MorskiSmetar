@@ -4,7 +4,7 @@
 #include "../include/level.h"
 int main()
 {
-    Risalnik::init("Morski smetar", mat::vec2(1920, 1080));
+    Risalnik::init("Morski smetar");
 
     Risalnik::barva_odzadja = 0x0000ffff;
     Risalnik::sredstva_pot = "../../sredstva";

@@ -23,40 +23,48 @@ void Zacetna::zacetek()
     m_izhod_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
     m_igraj_gumb.aktiven = true;
     m_izhod_gumb.aktiven = true;
+    m_zac_time = Cas::get_time() + 1;
 }
 
 void Zacetna::zanka()
 {
+    m_igraj_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2;
+    m_izhod_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2;
+
     m_obala.narisi_me();
     m_otoki.narisi_me();
 
     m_igraj_gumb.narisi_me();
     m_izhod_gumb.narisi_me();
-    if (m_igraj_gumb.je_miska_gor())
+    if (m_zac_time <= Cas::get_time())
     {
-        m_igraj_gumb.barva_objekta.set_a(0x55);
-        if (Risalnik::get_miskin_gumb() == Gumb::levi)
+
+        if (m_igraj_gumb.je_miska_gor())
         {
-            m_level_scena->zacetek();
-            Risalnik::aktivna_scena = m_level_scena;
-            konec();
+            m_igraj_gumb.barva_objekta.set_a(0x55);
+            if (Risalnik::get_miskin_gumb() == Gumb::levi)
+            {
+                m_level_scena->zacetek();
+                Risalnik::aktivna_scena = m_level_scena;
+                konec();
+            }
         }
-    }
-    else
-    {
-        m_igraj_gumb.barva_objekta.set_a(0xff);
-    }
-    if (m_izhod_gumb.je_miska_gor())
-    {
-        m_izhod_gumb.barva_objekta.set_a(0x55);
-        if (Risalnik::get_miskin_gumb() == Gumb::levi)
+        else
         {
-            Risalnik::konec();
+            m_igraj_gumb.barva_objekta.set_a(0xff);
         }
-    }
-    else
-    {
-        m_izhod_gumb.barva_objekta.set_a(0xff);
+        if (m_izhod_gumb.je_miska_gor())
+        {
+            m_izhod_gumb.barva_objekta.set_a(0x55);
+            if (Risalnik::get_miskin_gumb() == Gumb::levi)
+            {
+                Risalnik::konec();
+            }
+        }
+        else
+        {
+            m_izhod_gumb.barva_objekta.set_a(0xff);
+        }
     }
     Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "Morski smetar");
 }
@@ -67,7 +75,6 @@ void Zacetna::konec()
 
     m_obala.unici();
     m_otoki.unici();
-
     m_igraj_gumb.unici();
     m_izhod_gumb.unici();
 }

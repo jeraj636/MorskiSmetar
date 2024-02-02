@@ -24,11 +24,12 @@ private:
     uint32_t m_ploscice_tekstura;
     uint32_t m_tocke_tek;
     uint32_t m_ura_tek;
-
+    uint32_t m_izhod_gumb_tek;
     Zvok m_muzika;
 
     Objekt_vegovec m_vegovec;
 
+    Objekt m_izhod_gumb;
     Objekt m_tocke_obj;
     Objekt m_ura;
 
@@ -38,7 +39,7 @@ private:
     Font m_pisava;
 
     int m_tocke;
-    double m_next_tocek_odboj;
+    double m_next_tocke_odboj;
 };
 
 #endif

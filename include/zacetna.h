@@ -26,6 +26,8 @@ private:
     Objekt m_izhod_gumb;
 
     Scena *m_level_scena;
+
+    uint32_t m_zac_time;
 };
 
 #endif
