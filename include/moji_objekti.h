@@ -12,7 +12,9 @@ public:
     void update(std::vector<Objekt_smeti *> &smece);
     bool ali_zivim;
     bool sem_pokopan;
+    bool sem_mocan;
     void smrt();
+    void trk_s_crnim();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
@@ -22,6 +24,7 @@ private:
     static inline float m_hitrost = 150;
     static inline uint32_t m_grob_tekstura;
     static inline uint32_t m_duh_tekstura;
+    uint32_t m_mocni_ucinek_time;
 
 private:
     mat::vec2 m_smer;
@@ -39,6 +42,8 @@ public:
     void nastavi(CelicniAvtomat *zemljeveid);
     void update();
     void konec();
+    void udarjen();
+    bool sem_lahko_udarjen();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
@@ -55,6 +60,7 @@ private:
     CelicniAvtomat *m_zemljevid;
     bool m_sem_v_vodi;
     mat::vec2 m_smer;
+    double m_nazadnje_udarjen;
 };
 
 class Objekt_smeti : public Objekt

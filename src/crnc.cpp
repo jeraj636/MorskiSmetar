@@ -33,7 +33,9 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     tmp.perioda = .5f;
     tmp.naslednja_animacija = 0;
     animacije.push_back(tmp);
-
+    sem_mocan = false;
+    sem_pokopan = false;
+    ali_zivim = true;
     tmp.tekstura_id = std::vector<uint32_t>{m_hoja_tek_id[0], m_hoja_tek_id[1], m_hoja_tek_id[2], m_hoja_tek_id[3]};
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 1;
@@ -57,6 +59,10 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
 
 void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece)
 {
+    if (sem_mocan && m_mocni_ucinek_time <= Cas::get_time())
+    {
+        sem_mocan = false;
+    }
     if (!ali_zivim && sem_pokopan)
         return;
 
@@ -123,4 +129,9 @@ void Objekt_crnc::rand_smer()
 {
     float val = rand();
     m_smer = mat::vec2(cos(val), sin(val));
+}
+void Objekt_crnc::trk_s_crnim()
+{
+    m_mocni_ucinek_time = Cas::get_time() + 5;
+    sem_mocan = true;
 }

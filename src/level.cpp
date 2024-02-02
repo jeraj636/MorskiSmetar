@@ -10,6 +10,8 @@ Level::Level()
     m_pisava = Risalnik::nalozi_font("FixedDays.ttf", 40);
     m_ploscice_tekstura = Risalnik::nalozi_teksturo("ploscica.png");
 
+    m_muzika = Risalnik::nalozi_zvok("zvok/theme.mp3");
+
     m_tocke_tek = Risalnik::nalozi_teksturo("tocke.png");
     m_ura_tek = Risalnik::nalozi_teksturo("ura.png");
 }
@@ -28,15 +30,11 @@ void Level::zacetek()
     m_tocke = 0;
 
     m_vegovec.nastavi(&m_zemljevid);
-    /*
-        m_muzika.nastavi("../../sredstva/zvok/theme.mp3");
-        m_muzika.nastavi_loop(true);
-        m_muzika.predvajaj();
 
-    double next = Cas::get_time() + 0.05;
-    while (next > Cas::get_time())
-        ;
-        */
+    m_muzika.zacetek();
+    m_muzika.nastavi_loop(true);
+    m_muzika.predvajaj();
+
     int n = rand() % 3 + 5;
     for (int i = 0; i < n; i++)
     {
@@ -78,11 +76,27 @@ void Level::zanka()
 
         if (m_crnci[i]->ali_zivim)
             je_se_kaksen_crn = true;
-        if (m_vegovec.trk(*m_crnci[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_crnci[i]->ali_zivim)
+        if (m_vegovec.trk(*m_crnci[i]))
         {
-
-            m_crnci[i]->smrt();
-            m_tocke += 10;
+            if (Risalnik::get_tipko_tipkovnice(' ') && m_crnci[i]->ali_zivim)
+            {
+                m_crnci[i]->smrt();
+                m_tocke += 10;
+            }
+            if (m_crnci[i]->sem_mocan && m_vegovec.sem_lahko_udarjen())
+            {
+                m_tocke -= 30;
+                m_crnci[i]->sem_mocan = false;
+                m_vegovec.udarjen();
+                log::war("au");
+            }
+        }
+        for (int j = 0; j < m_crnci.size(); j++)
+        {
+            if (m_crnci[i]->ali_zivim && m_crnci[j]->ali_zivim && j != i && m_crnci[i]->trk(*m_crnci[j]))
+            {
+                m_crnci[j]->trk_s_crnim();
+            }
         }
     }
 
@@ -128,7 +142,7 @@ void Level::zanka()
     if (!je_se_kaksen_crn && m_smeti.size() == 0)
     {
         Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y / 2, 400, "BRAVO!");
-        }
+    }
     else
     {
         // Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 200, 400, std::to_string((int)floor(m_next_tocek_odboj - Cas::get_time())));
@@ -139,7 +153,7 @@ void Level::zanka()
                 m_tocke -= rand() % 10;
             else
             {
-                m_tocke -= rand() % m_tocke / 4 * 3;
+                m_tocke -= rand() % m_tocke / 2 + m_tocke / 6;
             }
             m_next_tocek_odboj = Cas::get_time() + rand() % 10;
         }
@@ -148,11 +162,10 @@ void Level::zanka()
 
 void Level::konec()
 {
-    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     m_vegovec.animacije = std::vector<Animacija>{};
     m_zemljevid.Unici();
-
+    m_muzika.stop();
     for (int i = 0; i < m_smeti.size(); i++)
     {
         delete m_smeti.back();

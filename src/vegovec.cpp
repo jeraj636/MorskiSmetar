@@ -48,7 +48,7 @@ void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
     trenutna_animacija = 0;
 
     m_zemljevid = zemljeveid;
-
+    m_nazadnje_udarjen = Cas::get_time();
     Animacija tmp;
     tmp.tekstura_id = std::vector<uint32_t>{m_idle_tek_id[0], m_idle_tek_id[1]};
     tmp.perioda = .5f;
@@ -156,4 +156,12 @@ void Objekt_vegovec::premakni()
         velikost.x *= -1;
 
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
+}
+void Objekt_vegovec::udarjen()
+{
+    m_nazadnje_udarjen = Cas::get_time();
+}
+bool Objekt_vegovec::sem_lahko_udarjen()
+{
+    return (m_nazadnje_udarjen + 3 <= Cas::get_time());
 }
