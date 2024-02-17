@@ -26,11 +26,7 @@ void Objekt_smeti::update()
 {
     if (!m_sem_v_vodi)
         return;
-    if (trk('0'))
-    {
-        m_sem_v_vodi = false;
-        return;
-    }
+
     if (trk('.') || sem_zunaj())
     {
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());

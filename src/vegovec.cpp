@@ -77,7 +77,7 @@ void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
     id_teksture = animacije[0].tekstura_id[0];
 }
 
-void Objekt_vegovec::update(std::vector<Objekt_jasek *> &jaski)
+void Objekt_vegovec::update(Objekt_jasek &jasek)
 {
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
@@ -92,12 +92,10 @@ void Objekt_vegovec::update(std::vector<Objekt_jasek *> &jaski)
         pozicija = trkalnik_poz;
         velikost = trkalnik_vel;
         m_sem_v_vodi = true;
-        for (int i = 0; i < jaski.size(); i++)
-            if (trk(*jaski[i]) || jaski[i]->trk(*this))
-            {
-                m_sem_v_vodi = false;
-                continue;
-            }
+        if (trk(jasek) || jasek.trk(*this))
+        {
+            m_sem_v_vodi = false;
+        }
         velikost = prava_vel;
         pozicija = prava_poz;
     }

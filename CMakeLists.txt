@@ -18,6 +18,8 @@ src/crnc.cpp
 src/smece.cpp
 src/greta.cpp
 src/jasek.cpp
+src/jud.cpp
+src/cekin.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

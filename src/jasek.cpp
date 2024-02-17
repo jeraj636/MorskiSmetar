@@ -19,3 +19,9 @@ void Objekt_jasek::rand_time()
 {
     m_nex_time = rand() % 10;
 }
+
+void Objekt_jasek::naredi_juda(std::vector<Objekt_jud *> &judi, CelicniAvtomat *zemljevid)
+{
+    judi.push_back(new Objekt_jud);
+    judi.back()->nastavi(zemljevid, pozicija);
+}

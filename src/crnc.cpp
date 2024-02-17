@@ -27,8 +27,10 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     barva_objekta = 0xffffffff;
     barva_odzadja = 0;
     trenutna_animacija = 0;
-    Animacija tmp;
     ali_zivim = true;
+    Animacija tmp;
+    rand_smer();
+
     tmp.tekstura_id = std::vector<uint32_t>{m_idle_tek_id[0], m_idle_tek_id[1]};
     tmp.perioda = .5f;
     tmp.naslednja_animacija = 0;
@@ -40,7 +42,6 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 1;
     animacije.push_back(tmp);
-    rand_smer();
     tmp.tekstura_id = std::vector<uint32_t>{m_plavanje_tek_id[0], m_plavanje_tek_id[1]};
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 2;
@@ -57,7 +58,7 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     animacije.push_back(tmp);
 }
 
-void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, std::vector<Objekt_jasek *> &jaski)
+void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek)
 {
     if (sem_mocan && m_mocni_ucinek_time <= Cas::get_time())
     {
@@ -79,12 +80,11 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, std::vector<Objekt_
         pozicija = trkalnik_poz;
         velikost = trkalnik_vel;
         m_sem_v_vodi = true;
-        for (int i = 0; i < jaski.size(); i++)
-            if (trk(*jaski[i]) || jaski[i]->trk(*this))
-            {
-                m_sem_v_vodi = false;
-                continue;
-            }
+
+        if (trk(jasek) || jasek.trk(*this))
+        {
+            m_sem_v_vodi = false;
+        }
         velikost = prava_vel;
         pozicija = prava_poz;
     }
@@ -101,8 +101,10 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, std::vector<Objekt_
         }
     }
 
-    if (pozicija.x < 20 || pozicija.x > Risalnik::get_velikost_okna().x - 20 || pozicija.y < 20 || pozicija.y > Risalnik::get_velikost_okna().y - 20 || m_naslednji_cas <= Cas::get_time())
+    if (pozicija.x <= 20 || pozicija.x >= Risalnik::get_velikost_okna().x - 20 || pozicija.y <= 20 || pozicija.y >= Risalnik::get_velikost_okna().y - 20 || m_naslednji_cas <= Cas::get_time())
     {
+        pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
+        pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         rand_smer();
