@@ -40,7 +40,7 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 1;
     animacije.push_back(tmp);
-
+	rand_smer();
     tmp.tekstura_id = std::vector<uint32_t>{m_plavanje_tek_id[0], m_plavanje_tek_id[1]};
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 2;
