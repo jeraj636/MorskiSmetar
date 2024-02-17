@@ -36,6 +36,7 @@ private:
     std::vector<Objekt_crnc *> m_crnci;
     std::vector<Objekt_smeti *> m_smeti;
     std::vector<Objekt_greta *> m_grete;
+    std::vector<Objekt_jasek *> m_jaski;
     Font m_pisava;
 
     int m_tocke;

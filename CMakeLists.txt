@@ -17,6 +17,7 @@ src/tocke.cpp
 src/crnc.cpp
 src/smece.cpp
 src/greta.cpp
+src/jasek.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

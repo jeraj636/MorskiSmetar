@@ -77,17 +77,29 @@ void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
     id_teksture = animacije[0].tekstura_id[0];
 }
 
-void Objekt_vegovec::update()
+void Objekt_vegovec::update(std::vector<Objekt_jasek *> &jaski)
 {
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
+    mat::vec2 prava_vel = velikost;
+    mat::vec2 prava_poz = pozicija;
     if (m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, ',', Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y) || m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, '0', Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y))
     {
         m_sem_v_vodi = false;
     }
     else
     {
+        pozicija = trkalnik_poz;
+        velikost = trkalnik_vel;
         m_sem_v_vodi = true;
+        for (int i = 0; i < jaski.size(); i++)
+            if (trk(*jaski[i]) || jaski[i]->trk(*this))
+            {
+                m_sem_v_vodi = false;
+                continue;
+            }
+        velikost = prava_vel;
+        pozicija = prava_poz;
     }
 
     if (trenutna_animacija != 2 && trenutna_animacija != 4)

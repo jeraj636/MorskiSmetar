@@ -7,7 +7,7 @@ int main()
     Risalnik::init("Morski smetar");
 
     Risalnik::barva_odzadja = 0x0000ffff;
-    Risalnik::sredstva_pot = "../sredstva";
+    Risalnik::sredstva_pot = "../../sredstva";
 
     Muzika::init();
 

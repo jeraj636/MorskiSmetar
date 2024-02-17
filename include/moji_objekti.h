@@ -4,12 +4,14 @@
 #include <henigma_engine.h>
 #include <CelicniAvtomat.h>
 class Objekt_smeti;
+class Objekt_jasek;
+
 class Objekt_crnc : public Objekt_anim
 {
 public:
     static void init();
     void nastavi(CelicniAvtomat *zemljeveid);
-    void update(std::vector<Objekt_smeti *> &smece);
+    void update(std::vector<Objekt_smeti *> &smece, std::vector<Objekt_jasek *> &jaski);
     bool ali_zivim;
     bool sem_pokopan;
     bool sem_mocan;
@@ -40,7 +42,7 @@ class Objekt_vegovec : public Objekt_anim
 public:
     static void init();
     void nastavi(CelicniAvtomat *zemljeveid);
-    void update();
+    void update(std::vector<Objekt_jasek *> &jaski);
     void konec();
     void udarjen();
     bool sem_lahko_udarjen();
@@ -91,7 +93,7 @@ class Objekt_greta : public Objekt_anim
 public:
     static void init();
     void nastavi(CelicniAvtomat *zemljeveid, std::vector<Objekt_smeti *> &smece);
-    void update(std::vector<Objekt_smeti *> &smece, int &tocke);
+    void update(std::vector<Objekt_smeti *> &smece, int &tocke, std::vector<Objekt_jasek *> &jaski);
     bool ali_zivim;
     bool sem_pokopan;
     void smrt();
@@ -117,4 +119,17 @@ private:
     void rand_smer();
 };
 
+class Objekt_jasek : public Objekt
+{
+public:
+    void nastavi();
+    static void init();
+
+private:
+    uint32_t m_nex_time;
+    inline static uint32_t m_tek_id;
+
+private:
+    void rand_time();
+};
 #endif

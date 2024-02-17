@@ -40,7 +40,7 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 1;
     animacije.push_back(tmp);
-	rand_smer();
+    rand_smer();
     tmp.tekstura_id = std::vector<uint32_t>{m_plavanje_tek_id[0], m_plavanje_tek_id[1]};
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 2;
@@ -57,7 +57,7 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     animacije.push_back(tmp);
 }
 
-void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece)
+void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, std::vector<Objekt_jasek *> &jaski)
 {
     if (sem_mocan && m_mocni_ucinek_time <= Cas::get_time())
     {
@@ -68,13 +68,25 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece)
 
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
+    mat::vec2 prava_vel = velikost;
+    mat::vec2 prava_poz = pozicija;
     if (m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, ',', Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y) || m_zemljevid->Trk(trkalnik_poz.x, trkalnik_poz.y, trkalnik_vel.x, trkalnik_vel.y, '0', Risalnik::get_velikost_okna().x, Risalnik::get_velikost_okna().y))
     {
         m_sem_v_vodi = false;
     }
     else
     {
+        pozicija = trkalnik_poz;
+        velikost = trkalnik_vel;
         m_sem_v_vodi = true;
+        for (int i = 0; i < jaski.size(); i++)
+            if (trk(*jaski[i]) || jaski[i]->trk(*this))
+            {
+                m_sem_v_vodi = false;
+                continue;
+            }
+        velikost = prava_vel;
+        pozicija = prava_poz;
     }
 
     if (ali_zivim)

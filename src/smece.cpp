@@ -47,5 +47,5 @@ void Objekt_smeti::rand_smer()
 }
 bool Objekt_smeti::sem_zunaj()
 {
-    return (pozicija.x < 0 || pozicija.x >= Risalnik::get_velikost_okna().x || pozicija.y < 0 || pozicija.y > Risalnik::get_velikost_okna().y - 20);
+    return (pozicija.x <= 0 || pozicija.x >= Risalnik::get_velikost_okna().x || pozicija.y <= 0 || pozicija.y >= Risalnik::get_velikost_okna().y);
 }

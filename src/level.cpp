@@ -7,6 +7,7 @@ Level::Level()
     Objekt_crnc::init();
     Objekt_smeti::init();
     Objekt_greta::init();
+    Objekt_jasek::init();
     m_pisava = Risalnik::nalozi_font("FixedDays.ttf", 40);
     m_ploscice_tekstura = Risalnik::nalozi_teksturo("ploscica.png");
 
@@ -58,6 +59,13 @@ void Level::zacetek()
         m_grete.back()->nastavi(&m_zemljevid, m_smeti);
     }
     m_next_tocke_odboj = Cas::get_time() + 5;
+
+    n = rand() % 2 + 3;
+    for (int i = 0; i < n; i++)
+    {
+        m_jaski.push_back(new Objekt_jasek);
+        m_jaski.back()->nastavi();
+    }
 }
 
 void Level::zanka()
@@ -68,13 +76,15 @@ void Level::zanka()
     m_ura.narisi_me();
     m_tocke_obj.narisi_me();
 
-    m_vegovec.update();
-    m_vegovec.narisi_me();
+    for (int i = 0; i < m_jaski.size(); i++)
+    {
+        m_jaski[i]->narisi_me();
+    }
 
     bool je_se_kaksen_crn = false;
     for (int i = 0; i < m_crnci.size(); i++)
     {
-        m_crnci[i]->update(m_smeti);
+        m_crnci[i]->update(m_smeti, m_jaski);
         m_crnci[i]->narisi_me();
 
         if (m_crnci[i]->ali_zivim)
@@ -102,7 +112,16 @@ void Level::zanka()
             }
         }
     }
-
+    for (int i = 0; i < m_grete.size(); i++)
+    {
+        m_grete[i]->update(m_smeti, m_tocke, m_jaski);
+        m_grete[i]->narisi_me();
+        if (m_vegovec.trk(*m_grete[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_grete[i]->ali_zivim)
+        {
+            m_grete[i]->smrt();
+            m_tocke -= 10;
+        }
+    }
     for (int i = 0; i < m_smeti.size(); i++)
     {
         m_smeti[i]->update();
@@ -116,19 +135,9 @@ void Level::zanka()
         }
     }
 
-    for (int i = 0; i < m_grete.size(); i++)
-    {
-        m_grete[i]->update(m_smeti, m_tocke);
-        m_grete[i]->narisi_me();
-        if (m_vegovec.trk(*m_grete[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_grete[i]->ali_zivim)
-        {
-            m_grete[i]->smrt();
-            m_tocke -= 10;
-        }
-    }
-
     //! Jaz sem zabit!!!!
-
+    m_vegovec.update(m_jaski);
+    m_vegovec.narisi_me();
     // Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), 20, 400, std::to_string(m_tocke));
     Risalnik::narisi_niz(m_pisava, 0x000000ff, 0, mat::vec2(70, Risalnik::get_velikost_okna().y - 115), 500, std::to_string(m_tocke));
     if (Risalnik::get_tipko_tipkovnice('R'))
@@ -181,10 +190,10 @@ void Level::konec()
     m_izhod_gumb.unici();
     m_zemljevid.Unici();
     m_muzika.stop();
-    for (int i = 0; i < m_smeti.size(); i++)
+    for (int i = 0; i < m_jaski.size(); i++)
     {
-        delete m_smeti.back();
-        m_smeti.pop_back();
+        delete m_jaski.back();
+        m_jaski.pop_back();
     }
 
     for (int i = 0; i < m_crnci.size(); i++)
@@ -199,8 +208,15 @@ void Level::konec()
         delete m_grete.back();
         m_grete.pop_back();
     }
+    for (int i = 0; i < m_smeti.size(); i++)
+    {
+        delete m_smeti.back();
+        m_smeti.pop_back();
+    }
+
     m_smeti = std::vector<Objekt_smeti *>{};
     m_crnci = std::vector<Objekt_crnc *>{};
     m_grete = std::vector<Objekt_greta *>{};
+    m_jaski = std::vector<Objekt_jasek *>{};
     // std::cout << "konec2" << std::endl;
 }
