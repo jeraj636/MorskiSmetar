@@ -46,6 +46,10 @@ private:
 
     uint32_t m_st_judov_const;
     uint32_t m_st_judov;
+    bool m_je_se_kaksen_crn;
+
+private:
+    bool konec_igre();
 };
 
 #endif

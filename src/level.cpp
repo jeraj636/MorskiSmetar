@@ -72,7 +72,6 @@ void Level::zacetek()
         m_judi.back()->nastavi(&m_zemljevid, mat::vec2(rand() % (int)Risalnik::get_velikost_okna().x, rand() % (int)Risalnik::get_velikost_okna().y));
     }
 }
-
 void Level::zanka()
 {
     m_obala.narisi_me();
@@ -83,14 +82,14 @@ void Level::zanka()
 
     m_jasek.narisi_me();
 
-    bool je_se_kaksen_crn = false;
+    m_je_se_kaksen_crn = false;
     for (int i = 0; i < m_crnci.size(); i++)
     {
         m_crnci[i]->update(m_smeti, m_jasek);
         m_crnci[i]->narisi_me();
 
         if (m_crnci[i]->ali_zivim)
-            je_se_kaksen_crn = true;
+            m_je_se_kaksen_crn = true;
         if (m_vegovec.trk(*m_crnci[i]))
         {
             if (Risalnik::get_tipko_tipkovnice(' ') && m_crnci[i]->ali_zivim)
@@ -103,10 +102,9 @@ void Level::zanka()
                 m_tocke -= 30;
                 m_crnci[i]->sem_mocan = false;
                 m_vegovec.udarjen();
-                log::war("au");
             }
         }
-        for (int j = 0; j < m_crnci.size(); j++)
+        for (int j = 0; j < m_crnci.size(); j++) // ce se dva crnca zadaneta
         {
             if (m_crnci[i]->ali_zivim && m_crnci[j]->ali_zivim && j != i && m_crnci[i]->trk(*m_crnci[j]))
             {
@@ -114,6 +112,7 @@ void Level::zanka()
             }
         }
     }
+
     for (int i = 0; i < m_grete.size(); i++)
     {
         m_grete[i]->update(m_smeti, m_tocke, m_jasek);
@@ -124,6 +123,7 @@ void Level::zanka()
             m_tocke -= 10;
         }
     }
+
     for (int i = 0; i < m_judi.size(); i++)
     {
         m_judi[i]->update(m_jasek, m_cekini);
@@ -149,6 +149,7 @@ void Level::zanka()
             }
         }
     }
+
     for (int i = 0; i < m_smeti.size(); i++)
     {
         m_smeti[i]->update();
@@ -161,12 +162,14 @@ void Level::zanka()
             m_tocke += 5;
         }
     }
+
     for (int i = 0; i < m_cekini.size(); i++)
     {
         m_cekini[i]->narisi_me();
         if (m_vegovec.trk(*m_cekini[i]))
         {
-            m_tocke += 20;
+            if (!konec_igre())
+                m_tocke += 20;
             std::swap(m_cekini[i], m_cekini.back());
             delete m_cekini.back();
             m_cekini.pop_back();
@@ -181,19 +184,21 @@ void Level::zanka()
             break;
         }
     }
+
     //! Jaz sem zabit!!!!
     m_vegovec.update(m_jasek);
     m_vegovec.narisi_me();
-    Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), 20, 400, std::to_string(1 / Cas::get_delta_time()));
+
     Risalnik::narisi_niz(m_pisava, 0x000000ff, 0, mat::vec2(70, Risalnik::get_velikost_okna().y - 115), 500, std::to_string(m_tocke));
+
     if (Risalnik::get_tipko_tipkovnice('R'))
     {
         konec();
         zacetna->zacetek();
         Risalnik::aktivna_scena = zacetna;
     }
-    // std::cout << m_next_tocke_odboj << "  " << Cas::get_time() << "\n";
-    if (!je_se_kaksen_crn && m_smeti.size() == 0)
+
+    if (konec_igre()) // konec igre
     {
         Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y / 2, 400, "BRAVO!");
         m_izhod_gumb.narisi_me();
@@ -214,7 +219,6 @@ void Level::zanka()
     }
     else
     {
-        // Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 200, 400, std::to_string((int)floor(m_next_tocke_odboj - Cas::get_time())));
         Risalnik::narisi_niz(m_pisava, 0x000000ff, Barva(0), mat::vec2(70, Risalnik::get_velikost_okna().y - 55), 500, std::to_string((int)floor(m_next_tocke_odboj - Cas::get_time())));
         if (m_next_tocke_odboj <= Cas::get_time())
         {
@@ -227,7 +231,8 @@ void Level::zanka()
             m_next_tocke_odboj = Cas::get_time() + rand() % 10;
         }
     }
-    if (m_st_judov < m_st_judov_const)
+
+    if (m_st_judov < m_st_judov_const) // preverjanje števeila judov
     {
         m_jasek.naredi_juda(m_judi, &m_zemljevid);
         m_st_judov++;
@@ -254,20 +259,32 @@ void Level::konec()
         delete m_grete.back();
         m_grete.pop_back();
     }
+
     for (int i = 0; i < m_smeti.size(); i++)
     {
         delete m_smeti.back();
         m_smeti.pop_back();
     }
+
     for (int i = 0; i < m_judi.size(); i++)
     {
         delete m_judi.back();
         m_judi.pop_back();
     }
+
+    for (int i = 0; i < m_cekini.size(); i++)
+    {
+        delete m_cekini.back();
+        m_cekini.pop_back();
+    }
+
     m_smeti = std::vector<Objekt_smeti *>{};
     m_crnci = std::vector<Objekt_crnc *>{};
     m_grete = std::vector<Objekt_greta *>{};
     m_judi = std::vector<Objekt_jud *>{};
+}
 
-    // std::cout << "konec2" << std::endl;
+bool Level::konec_igre()
+{
+    return (!m_je_se_kaksen_crn && m_smeti.size() == 0);
 }

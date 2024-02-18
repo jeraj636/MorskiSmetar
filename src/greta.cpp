@@ -168,6 +168,6 @@ void Objekt_greta::smrt()
         barva_objekta.set_a(0x55);
         sem_pokopan = false;
         trenutna_animacija = 4;
-        velikost = mat::vec2(24, 48);
+        velikost = mat::vec2(24, 48); //*Mea maxima culpa
     }
 }

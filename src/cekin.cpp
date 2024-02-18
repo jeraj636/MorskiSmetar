@@ -13,5 +13,5 @@ void Objekt_cekin::nastavi(const mat::vec2 &poz)
     aktiven = true;
     barva_objekta = 0xffffffff;
     barva_odzadja = 0;
-    ttl = Cas::get_time() + rand() % 10;
+    ttl = Cas::get_time() + rand() % 5 + 5;
 }
