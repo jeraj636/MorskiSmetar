@@ -1,5 +1,4 @@
 #include "../include/moji_objekti.h"
-
 void Objekt_greta::init()
 {
     m_idle_tek_id[0] = Risalnik::nalozi_teksturo("greta/idle/idle1.png");

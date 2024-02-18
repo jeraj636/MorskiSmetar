@@ -1,5 +1,4 @@
 #include "../include/tocke.h"
-
 void Tocke::nastavi(const Objekt &o)
 {
     m_tab[0] = mat::vec3(.0f, .0f, 1.0f);
