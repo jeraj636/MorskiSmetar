@@ -15,7 +15,7 @@ public:
     void konec() override;
     Scena *zacetna;
 
-private:
+protected:
     CelicniAvtomat m_zemljevid;
 
     Ploscice m_obala;
@@ -48,7 +48,7 @@ private:
     uint32_t m_st_judov;
     bool m_je_se_kaksen_crn;
 
-private:
+protected:
     bool konec_igre();
 };
 

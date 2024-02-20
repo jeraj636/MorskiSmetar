@@ -44,11 +44,12 @@ public:
     static void init();
     void nastavi(CelicniAvtomat *zemljeveid);
     void update(Objekt_jasek &jaski);
+    void update_o(Objekt_jasek &jaski);
     void konec();
     void udarjen();
     bool sem_lahko_udarjen();
 
-private:
+protected:
     static inline uint32_t m_idle_tek_id[2];
     static inline uint32_t m_hoja_tek_id[4];
     static inline uint32_t m_udarec_tek_id[10];
@@ -175,5 +176,32 @@ public:
 private:
     inline static uint32_t m_tek_id;
 };
+class Objekt_vegovec2 : public Objekt_anim
+{
+public:
+    static void init();
+    void nastavi(CelicniAvtomat *zemljeveid);
+    void update(Objekt_jasek &jaski);
+    void update_o(Objekt_jasek &jaski);
+    void konec();
+    void udarjen();
+    bool sem_lahko_udarjen();
 
+protected:
+    static inline uint32_t m_idle_tek_id[2];
+    static inline uint32_t m_hoja_tek_id[4];
+    static inline uint32_t m_udarec_tek_id[10];
+    static inline uint32_t m_plavanje_tek_id[2];
+    static inline uint32_t m_plavanje_udraec_tek_id[10];
+    static inline float m_hitrost = 200;
+
+private:
+    void premakni();
+
+private:
+    CelicniAvtomat *m_zemljevid;
+    bool m_sem_v_vodi;
+    mat::vec2 m_smer;
+    double m_nazadnje_udarjen;
+};
 #endif

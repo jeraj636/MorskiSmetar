@@ -21,6 +21,7 @@ Level::Level()
 }
 void Level::zacetek()
 {
+    Risalnik::aktivna_scena = this;
     m_izhod_gumb_tek = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
     m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, rand() % 0xffffffff);
 
@@ -76,7 +77,6 @@ void Level::zanka()
 {
     m_obala.narisi_me();
     m_otoki.narisi_me();
-
     m_ura.narisi_me();
     m_tocke_obj.narisi_me();
 

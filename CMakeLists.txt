@@ -19,6 +19,9 @@ src/greta.cpp
 src/jasek.cpp
 src/jud.cpp
 src/cekin.cpp
+src/level_streznik.cpp
+src/level_client.cpp
+src/vegovec2.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

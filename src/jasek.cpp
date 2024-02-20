@@ -8,7 +8,7 @@ void Objekt_jasek::init()
 void Objekt_jasek::nastavi()
 {
     id_teksture = m_tek_id;
-    pozicija = mat::vec2(rand() % (int)Risalnik::get_velikost_okna().x, rand() % (int)Risalnik::get_velikost_okna().y);
+    pozicija = mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 128) + 64, rand() % ((int)Risalnik::get_velikost_okna().y - 128) + 64);
     velikost = mat::vec2(64, 64);
     aktiven = true;
     barva_objekta = 0xffffffff;

@@ -2,6 +2,8 @@
 
 #include "../include/zacetna.h"
 #include "../include/level.h"
+#include "../include/level_streznik.h"
+#include "../include/level_client.h"
 int main()
 {
     Risalnik::init("Morski smetar");
@@ -12,11 +14,15 @@ int main()
     Muzika::init();
 
     Level level;
+    Level_streznik s_level;
+    Level_client c_level;
 
-    Zacetna zacetna(&level);
+    Zacetna zacetna(&level, &c_level, &s_level);
     zacetna.zacetek();
 
     level.zacetna = &zacetna;
+    s_level.zacetna = &zacetna;
+    c_level.zacetna = &zacetna;
 
     Risalnik::aktivna_scena = &zacetna;
 

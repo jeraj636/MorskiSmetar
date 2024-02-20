@@ -5,7 +5,7 @@
 class Zacetna : public Scena
 {
 public:
-    Zacetna(Scena *level_scena);
+    Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena);
     void zacetek() override;
     void zanka() override;
     void konec() override;
@@ -24,8 +24,12 @@ private:
 
     Objekt m_igraj_gumb;
     Objekt m_izhod_gumb;
+    Objekt m_server_gumb;
+    Objekt m_client_gumb;
 
     Scena *m_level_scena;
+    Scena *m_client_scena;
+    Scena *m_server_scena;
 
     uint32_t m_zac_time;
 };

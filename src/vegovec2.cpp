@@ -1,42 +1,43 @@
 #include "../include/moji_objekti.h"
 
-void Objekt_vegovec::init()
+void Objekt_vegovec2::init()
 {
 
-    m_idle_tek_id[0] = Risalnik::nalozi_teksturo("vegovec/idle/idle1.png");
-    m_idle_tek_id[1] = Risalnik::nalozi_teksturo("vegovec/idle/idle2.png");
+    m_idle_tek_id[0] = Risalnik::nalozi_teksturo("vegovec2/idle/idle1.png");
+    m_idle_tek_id[1] = Risalnik::nalozi_teksturo("vegovec2/idle/idle2.png");
 
-    m_hoja_tek_id[0] = Risalnik::nalozi_teksturo("vegovec/hoja/hoja1.png");
-    m_hoja_tek_id[1] = Risalnik::nalozi_teksturo("vegovec/hoja/hoja2.png");
-    m_hoja_tek_id[2] = Risalnik::nalozi_teksturo("vegovec/hoja/hoja3.png");
-    m_hoja_tek_id[3] = Risalnik::nalozi_teksturo("vegovec/hoja/hoja4.png");
+    m_hoja_tek_id[0] = Risalnik::nalozi_teksturo("vegovec2/hoja/hoja1.png");
+    m_hoja_tek_id[1] = Risalnik::nalozi_teksturo("vegovec2/hoja/hoja2.png");
+    m_hoja_tek_id[2] = Risalnik::nalozi_teksturo("vegovec2/hoja/hoja3.png");
+    m_hoja_tek_id[3] = Risalnik::nalozi_teksturo("vegovec2/hoja/hoja4.png");
 
-    m_udarec_tek_id[0] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec1.png");
-    m_udarec_tek_id[1] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec2.png");
-    m_udarec_tek_id[2] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec3.png");
-    m_udarec_tek_id[3] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec4.png");
-    m_udarec_tek_id[4] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec5.png");
-    m_udarec_tek_id[5] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec6.png");
-    m_udarec_tek_id[6] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec7.png");
-    m_udarec_tek_id[7] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec8.png");
-    m_udarec_tek_id[8] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec9.png");
-    m_udarec_tek_id[9] = Risalnik::nalozi_teksturo("vegovec/udarec/udarec10.png");
+    m_udarec_tek_id[0] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec1.png");
+    m_udarec_tek_id[1] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec2.png");
+    m_udarec_tek_id[2] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec3.png");
+    m_udarec_tek_id[3] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec4.png");
+    m_udarec_tek_id[4] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec5.png");
+    m_udarec_tek_id[5] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec6.png");
+    m_udarec_tek_id[6] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec7.png");
+    m_udarec_tek_id[7] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec8.png");
+    m_udarec_tek_id[8] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec9.png");
+    m_udarec_tek_id[9] = Risalnik::nalozi_teksturo("vegovec2/udarec/udarec10.png");
 
-    m_plavanje_tek_id[0] = Risalnik::nalozi_teksturo("vegovec/plavanje/plavanje1.png");
-    m_plavanje_tek_id[1] = Risalnik::nalozi_teksturo("vegovec/plavanje/plavanje2.png");
+    m_plavanje_tek_id[0] = Risalnik::nalozi_teksturo("vegovec2/plavanje/plavanje1.png");
+    m_plavanje_tek_id[1] = Risalnik::nalozi_teksturo("vegovec2/plavanje/plavanje2.png");
 
-    m_plavanje_udraec_tek_id[0] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec1.png");
-    m_plavanje_udraec_tek_id[1] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec2.png");
-    m_plavanje_udraec_tek_id[2] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec3.png");
-    m_plavanje_udraec_tek_id[3] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec4.png");
-    m_plavanje_udraec_tek_id[4] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec5.png");
-    m_plavanje_udraec_tek_id[5] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec6.png");
-    m_plavanje_udraec_tek_id[6] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec7.png");
-    m_plavanje_udraec_tek_id[7] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec8.png");
-    m_plavanje_udraec_tek_id[8] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec9.png");
-    m_plavanje_udraec_tek_id[9] = Risalnik::nalozi_teksturo("vegovec/morskiUdarec/udarec10.png");
+    m_plavanje_udraec_tek_id[0] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec1.png");
+    m_plavanje_udraec_tek_id[1] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec2.png");
+    m_plavanje_udraec_tek_id[2] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec3.png");
+    m_plavanje_udraec_tek_id[3] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec4.png");
+    m_plavanje_udraec_tek_id[4] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec5.png");
+    m_plavanje_udraec_tek_id[5] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec6.png");
+    m_plavanje_udraec_tek_id[6] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec7.png");
+    m_plavanje_udraec_tek_id[7] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec8.png");
+    m_plavanje_udraec_tek_id[8] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec9.png");
+    m_plavanje_udraec_tek_id[9] = Risalnik::nalozi_teksturo("vegovec2/morskiUdarec/udarec10.png");
 }
-void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
+
+void Objekt_vegovec2::nastavi(CelicniAvtomat *zemljeveid)
 {
     pozicija = mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 40) + 20, rand() % ((int)Risalnik::get_velikost_okna().y - 40) + 20);
 
@@ -77,7 +78,7 @@ void Objekt_vegovec::nastavi(CelicniAvtomat *zemljeveid)
     id_teksture = animacije[0].tekstura_id[0];
 }
 
-void Objekt_vegovec::update(Objekt_jasek &jasek)
+void Objekt_vegovec2::update(Objekt_jasek &jasek)
 {
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
@@ -138,7 +139,7 @@ void Objekt_vegovec::update(Objekt_jasek &jasek)
         }
     }
 }
-void Objekt_vegovec::update_o(Objekt_jasek &jasek)
+void Objekt_vegovec2::update_o(Objekt_jasek &jasek)
 {
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
@@ -199,7 +200,7 @@ void Objekt_vegovec::update_o(Objekt_jasek &jasek)
         }
     }
 }
-void Objekt_vegovec::premakni()
+void Objekt_vegovec2::premakni()
 {
     if (Risalnik::get_tipko_tipkovnice('W') && Risalnik::get_tipko_tipkovnice('D'))
         m_smer = mat::vec2(sin(45), -sin(45));
@@ -227,11 +228,11 @@ void Objekt_vegovec::premakni()
 
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
 }
-void Objekt_vegovec::udarjen()
+void Objekt_vegovec2::udarjen()
 {
     m_nazadnje_udarjen = Cas::get_time();
 }
-bool Objekt_vegovec::sem_lahko_udarjen()
+bool Objekt_vegovec2::sem_lahko_udarjen()
 {
     return (m_nazadnje_udarjen + 3 <= Cas::get_time());
 }
