@@ -201,6 +201,47 @@ void Level_streznik::zanka()
         {
             m_grete[tab[1]]->smrt();
         }
+        else if (tab[0] == 19)
+        {
+            log::msg("C: ZELIM JUDE POZ");
+            tab[0] = 20;
+            tab[1] = m_judi.size();
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            for (int i = 0; i < m_judi.size(); i++)
+            {
+                tab[0] = 21;
+                tab[1] = i;
+                void *tmp = tab;
+                tmp = (char *)tmp + 2;
+                memcpy(tmp, &m_judi[i]->pozicija.x, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_judi[i]->pozicija.y, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_judi[i]->m_smer.x, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_judi[i]->m_smer.y, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_judi[i]->ali_zivim, 1);
+
+                tmp = (char *)tmp + 1;
+                memcpy(tmp, &m_judi[i]->sem_pokopan, 1);
+
+                tmp = (char *)tmp + 1;
+                memcpy(tmp, &m_judi[i]->m_naslednji_cas, 8);
+
+                m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            }
+        }
+        else if (tab[0] == 22)
+        {
+            m_judi[tab[1]]->smrt();
+            m_st_judov--;
+            m_tocke -= 30;
+        }
         else if (tab[0] == 127)
         {
             log::msg("C: SIGNAL ZA USTAVITAV");
@@ -291,7 +332,7 @@ void Level_streznik::zanka()
             m_judi[i]->narisi_me();
             if (m_judi[i]->ali_zivim)
             {
-                if (m_judi[i]->sem_lahko_ubit())
+                if (m_judi[i]->sem_lahko_ubit() && m_judi[i]->ali_zivim)
                 {
 
                     for (int j = 0; j < m_crnci.size(); j++)
@@ -299,13 +340,25 @@ void Level_streznik::zanka()
                         {
                             m_judi[i]->smrt();
                             m_st_judov--;
+                            char tab[2];
+                            tab[0] = 22;
+                            tab[1] = i;
+                            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
                         }
                     if (m_judi[i]->trk(m_vegovec) && Risalnik::get_tipko_tipkovnice(' '))
                     {
-
+                        /*
+                        na tej tocki nevem ali bi sploh se bil programer
+                        veliko lažje bi bilo pomivati posoda v domu za ostarele
+                        ali pa streči hrano v kakšni beznici
+                        */
                         m_judi[i]->smrt();
                         m_st_judov--;
                         m_tocke -= 30;
+                        char tab[2];
+                        tab[0] = 22;
+                        tab[1] = i;
+                        m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
                     }
                 }
             }

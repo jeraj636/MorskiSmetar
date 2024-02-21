@@ -160,6 +160,8 @@ public:
     bool sem_pokopan;
     void smrt();
     bool sem_lahko_ubit();
+    friend class Level_streznik;
+    friend class Level_client;
 
 private:
     static inline uint32_t m_idle_tek_id[2];
@@ -170,9 +172,10 @@ private:
     static inline uint32_t m_grob_tekstura;
     static inline uint32_t m_duh_tekstura;
 
-private:
-    mat::vec2 m_smer;
     bool m_sem_v_vodi;
+
+protected:
+    mat::vec2 m_smer;
     double m_naslednji_cas;
     uint32_t kdaj_sem_lahko_ubit;
 
