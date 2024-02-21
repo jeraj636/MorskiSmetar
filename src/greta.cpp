@@ -58,10 +58,19 @@ void Objekt_greta::nastavi(CelicniAvtomat *zemljevid, std::vector<Objekt_smeti *
     m_smer = mat::vec2(0, 0);
 }
 
-void Objekt_greta::update(std::vector<Objekt_smeti *> &smece, int &tocke, Objekt_jasek &jasek)
+int Objekt_greta::update(std::vector<Objekt_smeti *> &smece, int &tocke, Objekt_jasek &jasek)
 {
     if (!ali_zivim && sem_pokopan)
-        return;
+    {
+        trenutna_animacija = 3;
+        return -1;
+    }
+    /*
+    if (!ali_zivim && !sem_pokopan)
+    {
+        trenutna_animacija = 4;
+    }
+    */
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
     mat::vec2 prava_vel = velikost;
@@ -123,14 +132,12 @@ void Objekt_greta::update(std::vector<Objekt_smeti *> &smece, int &tocke, Objekt
         {
             if (trk(*smece[i]))
             {
-                std::swap(smece[i], smece.back());
-                delete smece.back();
-                smece.pop_back();
+                return i;
                 if (smece.size() != 0)
                     m_trenutna_smet = rand() % smece.size();
-                tocke++;
             }
         }
+    return -1;
 }
 
 void Objekt_greta::nastavi_smer(Objekt_smeti *t)
@@ -152,6 +159,7 @@ void Objekt_greta::rand_smer()
     float val = rand();
     m_smer = mat::vec2(cos(val), sin(val));
 }
+// Requiem æternam dona ei, Domine
 void Objekt_greta::smrt()
 {
     ali_zivim = false;

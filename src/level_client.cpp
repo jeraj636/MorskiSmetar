@@ -1,5 +1,5 @@
 #include "../include/level_client.h"
-
+#include <fstream>
 Level_client::Level_client()
     : Level(),
       m_razresevalnik(m_io_kontekst),
@@ -10,9 +10,15 @@ Level_client::Level_client()
 void Level_client::zacetek()
 {
     Risalnik::aktivna_scena = this;
-
-    m_koncna_tocka = *m_razresevalnik.resolve(asio::ip::udp::v4(), "127.0.0.1", "8080").begin();
-
+    std::ifstream datoteka("../../sredstva/server.txt");
+    if (!datoteka)
+        log::err("NI DATOTEKE");
+    std::string ip_streznika;
+    std::getline(datoteka, ip_streznika);
+    log::msg("IP STREZNIKA: " + ip_streznika);
+    // std::cout << ip_streznika << "\n";
+    m_koncna_tocka = *m_razresevalnik.resolve(asio::ip::udp::v4(), ip_streznika, "8080").begin();
+    // Cas::nastavi_staticen_delta_time(true);
     m_vticnik.open(asio::ip::udp::v4());
     m_vticnik.send_to(asio::buffer("\0"), m_koncna_tocka);
     log::msg("CLIENT");
@@ -52,69 +58,159 @@ void Level_client::zanka()
             m_sem_zacel = true;
             m_vegovec2.nastavi(&m_zemljevid);
             m_kdaj_zelim_vegovec_poz = Cas::get_time() + 0.01;
+            m_kdaj_zelim_crnce = Cas::get_time() + 0.1;
+            m_kdaj_zelim_smeti = Cas::get_time() + 0.2;
+            m_kdaj_zelim_grete = Cas::get_time() + 0.3;
         }
         else if (tab[0] == 4)
         {
-            int x = m_vegovec2.pozicija.x;
-            int y = m_vegovec2.pozicija.y;
             tab[0] = 5;
-            std::string X = std::to_string(x);
-            std::string Y = std::to_string(y);
-            /*
-            if (x < 1000)
-                X.pop_back();
-            if (y < 1000)
-                Y.pop_back();
-            */
-            for (int i = 1; i < 9; i++)
-                tab[i] = 0;
-
-            for (int i = X.size() - 1; i >= 0; i--)
-            {
-
-                if (x < 1000)
-                    tab[i + 2] = X[i] - '0';
-                else if (x < 100)
-                    tab[i + 3] = X[i] - '0';
-
-                else
-                    tab[i + 1] = X[i] - '0';
-            }
-            for (int i = Y.size() - 1; i >= 0; i--)
-            {
-                if (y < 1000)
-                    tab[i + 6] = Y[i] - '0';
-                else if (y < 100)
-                    tab[i + 7] = Y[i] - '0';
-                else
-                    tab[i + 5] = Y[i] - '0';
-            }
+            void *tmp = tab;
+            tmp = (char *)tmp + 1;
+            memcpy(tmp, &m_vegovec2.pozicija.x, 4);
+            tmp = (char *)tmp + 4;
+            memcpy(tmp, &m_vegovec2.pozicija.y, 4);
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            log::msg("S: ZELIM VEGOVEC POZICIJO");
+            log::msg("C: POSILJAM VEGOVEC POZICIJO");
             log::msg("S: ZELIM VEGOVEC POZICIJO");
             log::msg("C: POSILJAM VEGOVEC POZICIJO");
             // std::cout << X << Y << "\n";
         }
         else if (tab[0] == 5)
         {
-            /*
-            for (int i = 0; i < 9; i++)
+
+            void *tmp = tab;
+            tmp = (char *)tmp + 1;
+            memcpy(&m_vegovec.pozicija.x, tmp, 4);
+            tmp = (char *)tmp + 4;
+            memcpy(&m_vegovec.pozicija.y, tmp, 4);
+        }
+        else if (tab[0] == 7)
+        {
+            log::msg("S: POSILJAM CRNC VEL");
+            m_crnci.resize(tab[1]);
+        }
+        else if (tab[0] == 8)
+        {
+            int i = tab[1];
+            void *tmp = tab;
+            tmp = (char *)tmp + 2;
+            memcpy(&m_crnci[i]->pozicija.x, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_crnci[i]->pozicija.y, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_crnci[i]->m_smer.x, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_crnci[i]->m_smer.y, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_crnci[i]->ali_zivim, tmp, 1);
+
+            tmp = (char *)tmp + 1;
+            memcpy(&m_crnci[i]->sem_pokopan, tmp, 1);
+
+            tmp = (char *)tmp + 1;
+            memcpy(&m_crnci[i]->m_naslednji_cas, tmp, 8);
+            log::msg("S: POSILJAM CRNC");
+        }
+        else if (tab[0] == 10)
+        {
+            m_crnci[tab[1]]->smrt();
+        }
+        else if (tab[0] == 12)
+        {
+            int i = m_smeti.size();
+            std::cout << "tu1" << std::endl;
+            int k;
+            void *tmp = tab;
+            tmp = (char *)tmp + 1;
+            memcpy(&k, tmp, 4);
+            std::cout << k << "  " << i << std::endl;
+            if (i < k)
             {
-                std::cout << (int)tab[i];
+                while (m_smeti.size() != i)
+                {
+                    m_smeti.push_back(new Objekt_smeti);
+                    m_smeti.back()->nastavi(&m_zemljevid, mat::vec2(0, 0));
+                }
             }
-            std::cout << "\n";
-            */
-            int x = 0;
-            int y = 0;
-            for (int i = 0; i < 4; i++)
+            else if (i > k)
             {
-                x += tab[i + 1];
-                y += tab[i + 5];
-                x *= 10;
-                y *= 10;
+                while (m_smeti.size() != i)
+                {
+                    delete m_smeti.back();
+                    m_smeti.pop_back();
+                }
             }
-            y /= 10;
-            x /= 10;
-            m_vegovec.pozicija = mat::vec2(x, y);
+            std::cout << "tu2" << std::endl;
+        }
+        else if (tab[0] == 13)
+        {
+
+            std::cout << "tlele1" << std::endl;
+            void *tmp = tab;
+            int i;
+            tmp = (char *)tmp + 1;
+            memcpy(&i, tmp, 4);
+            std::cout << i << "   " << m_smeti.size() << std::endl;
+            std::cout << "tlele1,5" << std::endl;
+            if (i < m_smeti.size())
+            {
+
+                tmp = (char *)tmp + 4;
+                memcpy(&m_smeti[i]->pozicija.x, tmp, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(&m_smeti[i]->pozicija.y, tmp, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(&m_smeti[i]->m_smer.x, tmp, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(&m_smeti[i]->m_smer.y, tmp, 4);
+                std::cout << "tlele2" << std::endl;
+            }
+        }
+        else if (tab[0] == 16)
+        {
+            log::msg("S: POSILJAM GRETE VEL");
+            m_grete.resize(tab[1]);
+        }
+        else if (tab[0] == 17)
+        {
+            int i = tab[1];
+            void *tmp = tab;
+            tmp = (char *)tmp + 2;
+            memcpy(&m_grete[i]->pozicija.x, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_grete[i]->pozicija.y, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_grete[i]->m_smer.x, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_grete[i]->m_smer.y, tmp, 4);
+
+            tmp = (char *)tmp + 4;
+            memcpy(&m_grete[i]->ali_zivim, tmp, 1);
+
+            tmp = (char *)tmp + 1;
+            memcpy(&m_grete[i]->sem_pokopan, tmp, 1);
+
+            tmp = (char *)tmp + 1;
+            memcpy(&m_grete[i]->m_next_time, tmp, 8);
+            tmp = (char *)tmp + 8;
+            memcpy(&m_grete[i]->m_trenutna_smet, tmp, 4);
+            log::msg("S: POSILJAM CRNC");
+        }
+        else if (tab[0] == 18)
+        {
+            m_grete[tab[1]]->smrt();
         }
         else if (tab[0] == 127)
         {
@@ -128,12 +224,39 @@ void Level_client::zanka()
     {
         if (m_kdaj_zelim_vegovec_poz <= Cas::get_time())
         {
-            std::cout << m_vegovec2.pozicija;
+            // std::cout << m_vegovec2.pozicija;
             m_kdaj_zelim_vegovec_poz += 0.01;
             char tab[1];
             tab[0] = 4;
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             log::msg("C: ZELIM VEGOVEC POZICIJO");
+        }
+        if (m_kdaj_zelim_crnce <= Cas::get_time())
+        {
+            // std::cout << m_vegovec2.pozicija;
+            m_kdaj_zelim_crnce += 0.1;
+            char tab[1];
+            tab[0] = 6;
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            log::msg("C: ZELIM CRNC POZ");
+        }
+        if (m_kdaj_zelim_smeti <= Cas::get_time())
+        {
+            // std::cout << m_vegovec2.pozicija;
+            m_kdaj_zelim_smeti += 0.2;
+            char tab[1];
+            tab[0] = 11;
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            log::msg("C: ZELIM SMETI POZ");
+        }
+        if (m_kdaj_zelim_grete <= Cas::get_time())
+        {
+            // std::cout << m_vegovec2.pozicija;
+            m_kdaj_zelim_grete += 0.1;
+            char tab[1];
+            tab[0] = 15;
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            log::msg("C: ZELIM CRNC POZ");
         }
         // Level::zanka();
         m_obala.narisi_me();
@@ -151,18 +274,23 @@ void Level_client::zanka()
 
             if (m_crnci[i]->ali_zivim)
                 m_je_se_kaksen_crn = true;
-            if (m_vegovec.trk(*m_crnci[i]))
+            if (m_vegovec2.trk(*m_crnci[i]))
             {
                 if (Risalnik::get_tipko_tipkovnice(' ') && m_crnci[i]->ali_zivim)
                 {
+
                     m_crnci[i]->smrt();
                     m_tocke += 10;
+                    char tab[2];
+                    tab[0] = 10;
+                    tab[1] = i;
+                    m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
                 }
-                if (m_crnci[i]->sem_mocan && m_vegovec.sem_lahko_udarjen())
+                if (m_crnci[i]->sem_mocan && m_vegovec2.sem_lahko_udarjen())
                 {
                     m_tocke -= 30;
                     m_crnci[i]->sem_mocan = false;
-                    m_vegovec.udarjen();
+                    m_vegovec2.udarjen();
                 }
             }
             for (int j = 0; j < m_crnci.size(); j++) // ce se dva crnca zadaneta
@@ -176,12 +304,24 @@ void Level_client::zanka()
 
         for (int i = 0; i < m_grete.size(); i++)
         {
-            m_grete[i]->update(m_smeti, m_tocke, m_jasek);
+            int t = m_grete[i]->update(m_smeti, m_tocke, m_jasek);
+            if (t != -1)
+            {
+
+                std::swap(m_smeti[t], m_smeti.back());
+                delete m_smeti.back();
+                m_smeti.pop_back();
+                m_tocke++;
+            }
             m_grete[i]->narisi_me();
-            if (m_vegovec.trk(*m_grete[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_grete[i]->ali_zivim)
+            if (m_vegovec2.trk(*m_grete[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_grete[i]->ali_zivim)
             {
                 m_grete[i]->smrt();
                 m_tocke -= 10;
+                char tab[2];
+                tab[0] = 18;
+                tab[1] = i;
+                m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             }
         }
 
@@ -200,7 +340,7 @@ void Level_client::zanka()
                             m_judi[i]->smrt();
                             m_st_judov--;
                         }
-                    if (m_judi[i]->trk(m_vegovec) && Risalnik::get_tipko_tipkovnice(' '))
+                    if (m_judi[i]->trk(m_vegovec2) && Risalnik::get_tipko_tipkovnice(' '))
                     {
 
                         m_judi[i]->smrt();
@@ -215,7 +355,8 @@ void Level_client::zanka()
         {
             m_smeti[i]->update();
             m_smeti[i]->narisi_me();
-            if (m_vegovec.trk(*m_smeti[i]))
+
+            if (m_vegovec2.trk(*m_smeti[i]))
             {
                 std::swap(m_smeti[i], m_smeti.back());
                 delete m_smeti.back();
@@ -227,7 +368,7 @@ void Level_client::zanka()
         for (int i = 0; i < m_cekini.size(); i++)
         {
             m_cekini[i]->narisi_me();
-            if (m_vegovec.trk(*m_cekini[i]))
+            if (m_vegovec2.trk(*m_cekini[i]))
             {
                 if (!konec_igre())
                     m_tocke += 20;

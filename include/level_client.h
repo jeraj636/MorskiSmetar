@@ -27,5 +27,8 @@ private:
     Objekt_vegovec2 m_vegovec2;
 
     double m_kdaj_zelim_vegovec_poz;
+    double m_kdaj_zelim_crnce;
+    double m_kdaj_zelim_smeti;
+    double m_kdaj_zelim_grete;
 };
 #endif

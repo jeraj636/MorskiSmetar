@@ -4,7 +4,10 @@ void Objekt_smeti::init()
 {
     m_smeti_tek = Risalnik::nalozi_teksturo("smet.png");
 }
-
+/*
+windows je za programerja,
+kot skrhane škarje za frizerja.
+*/
 void Objekt_smeti::nastavi(CelicniAvtomat *zemljeveid, mat::vec2 poz)
 {
     velikost = mat::vec2(20, 20);
@@ -24,7 +27,7 @@ bool Objekt_smeti::trk(char c)
 }
 void Objekt_smeti::update()
 {
-    if (!m_sem_v_vodi)
+    if (!m_sem_v_vodi || trk('0'))
         return;
 
     if (trk('.') || sem_zunaj())

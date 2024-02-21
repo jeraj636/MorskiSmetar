@@ -14,9 +14,14 @@ void Level_streznik::zacetek()
     Risalnik::aktivna_scena = this;
     m_sem_zacel = false;
     m_sem_povezan = false;
-    // m_naslednje_posiljanje = Cas::get_time() + 0.1f;
+    // Cas::nastavi_staticen_delta_time(true, 0.03);
+    //  m_naslednje_posiljanje = Cas::get_time() + 0.1f;
 }
-
+/*
+mea culpa
+mea culpa
+mea maxima culpa
+*/
 void Level_streznik::zanka()
 {
     if (m_vticnik.available() > 0)
@@ -60,61 +65,141 @@ void Level_streznik::zanka()
         }
         else if (tab[0] == 4)
         {
-            int x = m_vegovec.pozicija.x;
-            int y = m_vegovec.pozicija.y;
+
             tab[0] = 5;
-            std::string X = std::to_string(x);
-            std::string Y = std::to_string(y);
-            /*
-            if (x < 1000)
-                X.pop_back();
-            if (y < 1000)
-                Y.pop_back();
-            */
-            for (int i = 1; i < 9; i++)
-                tab[i] = 0;
-
-            for (int i = X.size() - 1; i >= 0; i--)
-            {
-
-                if (x < 1000)
-                    tab[i + 2] = X[i] - '0';
-                else if (x < 100)
-                    tab[i + 3] = X[i] - '0';
-
-                else
-                    tab[i + 1] = X[i] - '0';
-            }
-            for (int i = Y.size() - 1; i >= 0; i--)
-            {
-                if (y < 1000)
-                    tab[i + 6] = Y[i] - '0';
-                else if (y < 100)
-                    tab[i + 7] = Y[i] - '0';
-                else
-                    tab[i + 5] = Y[i] - '0';
-            }
+            void *tmp = tab;
+            tmp = (char *)tmp + 1;
+            memcpy(tmp, &m_vegovec.pozicija.x, 4);
+            tmp = (char *)tmp + 4;
+            memcpy(tmp, &m_vegovec.pozicija.y, 4);
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             log::msg("S: ZELIM VEGOVEC POZICIJO");
             log::msg("C: POSILJAM VEGOVEC POZICIJO");
-            // std::cout << X << Y << "\n";
         }
         else if (tab[0] == 5)
         {
-            std::cout << "\n";
 
-            int x = 0;
-            int y = 0;
-            for (int i = 0; i < 4; i++)
+            void *tmp = tab;
+            tmp = (char *)tmp + 1;
+            memcpy(&m_vegovec2.pozicija.x, tmp, 4);
+            tmp = (char *)tmp + 4;
+            memcpy(&m_vegovec2.pozicija.y, tmp, 4);
+        }
+        else if (tab[0] == 6)
+        {
+            log::msg("C: ZELIM CRNC POZ");
+            tab[0] = 7;
+            tab[1] = m_crnci.size();
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            log::msg("S: POSILJAM CRMC POZ");
+            for (int i = 0; i < m_crnci.size(); i++)
             {
-                x += tab[i + 1];
-                y += tab[i + 5];
-                x *= 10;
-                y *= 10;
+                tab[0] = 8;
+                tab[1] = i;
+                void *tmp = tab;
+                tmp = (char *)tmp + 2;
+                memcpy(tmp, &m_crnci[i]->pozicija.x, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_crnci[i]->pozicija.y, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_crnci[i]->m_smer.x, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_crnci[i]->m_smer.y, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_crnci[i]->ali_zivim, 1);
+
+                tmp = (char *)tmp + 1;
+                memcpy(tmp, &m_crnci[i]->sem_pokopan, 1);
+
+                tmp = (char *)tmp + 1;
+                memcpy(tmp, &m_crnci[i]->m_naslednji_cas, 8);
+
+                m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             }
-            y /= 10;
-            x /= 10;
-            m_vegovec2.pozicija = mat::vec2(x, y);
+        }
+        else if (tab[0] == 10)
+        {
+            m_crnci[tab[1]]->smrt();
+        }
+        else if (tab[0] == 11)
+        {
+            log::msg("C: ZELIM SMETI");
+            tab[0] = 12;
+            // tab[1] = m_smeti.size();
+            int i = m_smeti.size();
+            void *tmp = tab;
+            tmp = (char *)tmp + 1;
+            memcpy(tmp, &i, 4);
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            std::cout << "tukaj1" << std::endl;
+            for (int i = 0; i < m_smeti.size(); i++)
+            {
+                tab[0] = 13;
+                tmp = tab;
+                tmp = (char *)tmp + 1;
+                memcpy(tmp, &i, 4);
+                std::cout << i << m_smeti.size() << "\n";
+                // std::cout << i << "\n";
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_smeti[i]->pozicija.x, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_smeti[i]->pozicija.y, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_smeti[i]->m_smer.x, 4);
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_smeti[i]->m_smer.y, 4);
+                m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            }
+        }
+        else if (tab[0] == 15)
+        {
+            log::msg("C: ZELIM GRETA POZ");
+            tab[0] = 16;
+            tab[1] = m_grete.size();
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            log::msg("S: POSILJAM GRETA POZ");
+            for (int i = 0; i < m_grete.size(); i++)
+            {
+                tab[0] = 17;
+                tab[1] = i;
+                void *tmp = tab;
+                tmp = (char *)tmp + 2;
+                memcpy(tmp, &m_grete[i]->pozicija.x, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_grete[i]->pozicija.y, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_grete[i]->m_smer.x, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_grete[i]->m_smer.y, 4);
+
+                tmp = (char *)tmp + 4;
+                memcpy(tmp, &m_grete[i]->ali_zivim, 1);
+
+                tmp = (char *)tmp + 1;
+                memcpy(tmp, &m_grete[i]->sem_pokopan, 1);
+
+                tmp = (char *)tmp + 1;
+                memcpy(tmp, &m_grete[i]->m_next_time, 8);
+
+                tmp = (char *)tmp + 8;
+                memcpy(tmp, &m_grete[i]->m_trenutna_smet, 4);
+
+                m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+            }
+        }
+        else if (tab[0] == 18)
+        {
+            m_grete[tab[1]]->smrt();
         }
         else if (tab[0] == 127)
         {
@@ -156,6 +241,10 @@ void Level_streznik::zanka()
                 if (Risalnik::get_tipko_tipkovnice(' ') && m_crnci[i]->ali_zivim)
                 {
                     m_crnci[i]->smrt();
+                    char tab[2];
+                    tab[0] = 10;
+                    tab[1] = i;
+                    m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
                     m_tocke += 10;
                 }
                 if (m_crnci[i]->sem_mocan && m_vegovec.sem_lahko_udarjen())
@@ -176,12 +265,23 @@ void Level_streznik::zanka()
 
         for (int i = 0; i < m_grete.size(); i++)
         {
-            m_grete[i]->update(m_smeti, m_tocke, m_jasek);
+            int t = m_grete[i]->update(m_smeti, m_tocke, m_jasek);
+            if (t != -1)
+            {
+                std::swap(m_smeti[t], m_smeti.back());
+                delete m_smeti.back();
+                m_smeti.pop_back();
+                m_tocke++;
+            }
             m_grete[i]->narisi_me();
             if (m_vegovec.trk(*m_grete[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_grete[i]->ali_zivim)
             {
                 m_grete[i]->smrt();
                 m_tocke -= 10;
+                char tab[2];
+                tab[0] = 18;
+                tab[1] = i;
+                m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             }
         }
 
@@ -215,7 +315,7 @@ void Level_streznik::zanka()
         {
             m_smeti[i]->update();
             m_smeti[i]->narisi_me();
-            if (m_vegovec.trk(*m_smeti[i]))
+            if (m_vegovec.trk(*m_smeti[i]) || m_vegovec2.trk(*m_smeti[i]))
             {
                 std::swap(m_smeti[i], m_smeti.back());
                 delete m_smeti.back();

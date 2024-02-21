@@ -30,18 +30,19 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     ali_zivim = true;
     Animacija tmp;
     rand_smer();
+    sem_mocan = false;
+    sem_pokopan = false;
 
     tmp.tekstura_id = std::vector<uint32_t>{m_idle_tek_id[0], m_idle_tek_id[1]};
     tmp.perioda = .5f;
     tmp.naslednja_animacija = 0;
     animacije.push_back(tmp);
-    sem_mocan = false;
-    sem_pokopan = false;
-    ali_zivim = true;
+
     tmp.tekstura_id = std::vector<uint32_t>{m_hoja_tek_id[0], m_hoja_tek_id[1], m_hoja_tek_id[2], m_hoja_tek_id[3]};
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 1;
     animacije.push_back(tmp);
+
     tmp.tekstura_id = std::vector<uint32_t>{m_plavanje_tek_id[0], m_plavanje_tek_id[1]};
     tmp.perioda = .1f;
     tmp.naslednja_animacija = 2;
@@ -65,7 +66,10 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek
         sem_mocan = false;
     }
     if (!ali_zivim && sem_pokopan)
+    {
+        trenutna_animacija = 3;
         return;
+    }
 
     mat::vec2 trkalnik_vel(32, 10);
     mat::vec2 trkalnik_poz(pozicija.x, pozicija.y + velikost.y / 2 + 5);
@@ -109,18 +113,30 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         rand_smer();
         m_naslednji_cas = Cas::get_time() + rand() % 10;
+        /*
         if (ali_zivim)
         {
             smece.push_back(new Objekt_smeti);
             smece.back()->nastavi(m_zemljevid, pozicija);
             smece.back()->update();
         }
+        */
     }
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
 
     if ((velikost.x > 0 && m_smer.x > 0) || (velikost.x < 0 && m_smer.x < 0))
         velikost.x *= -1;
+    if (ali_zivim && m_naslednji_cas_za_smet <= Cas::get_time())
+    {
+        smece.push_back(new Objekt_smeti);
+        smece.back()->nastavi(m_zemljevid, pozicija);
+        smece.back()->update();
+        m_naslednji_cas_za_smet = Cas::get_time() + rand() % 3 + 2;
+    }
 }
+/*
+in večna luč naj mu sveti
+*/
 void Objekt_crnc::smrt()
 {
     ali_zivim = false;

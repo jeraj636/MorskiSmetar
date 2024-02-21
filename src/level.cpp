@@ -70,7 +70,7 @@ void Level::zacetek()
     for (int i = 0; i < n; i++)
     {
         m_judi.push_back(new Objekt_jud);
-        m_judi.back()->nastavi(&m_zemljevid, mat::vec2(rand() % (int)Risalnik::get_velikost_okna().x, rand() % (int)Risalnik::get_velikost_okna().y));
+        m_judi.back()->nastavi(&m_zemljevid, mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 64) + 32, rand() % ((int)Risalnik::get_velikost_okna().y - 64) + 32));
     }
 }
 void Level::zanka()
@@ -115,7 +115,14 @@ void Level::zanka()
 
     for (int i = 0; i < m_grete.size(); i++)
     {
-        m_grete[i]->update(m_smeti, m_tocke, m_jasek);
+        int t = m_grete[i]->update(m_smeti, m_tocke, m_jasek);
+        if (t != -1)
+        {
+            std::swap(m_smeti[t], m_smeti.back());
+            delete m_smeti.back();
+            m_smeti.pop_back();
+            m_tocke++;
+        }
         m_grete[i]->narisi_me();
         if (m_vegovec.trk(*m_grete[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_grete[i]->ali_zivim)
         {
