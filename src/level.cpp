@@ -188,7 +188,7 @@ void Level::zanka()
             std::swap(m_cekini[i], m_cekini.back());
             delete m_cekini.back();
             m_cekini.pop_back();
-            break;
+            // break;
         }
     }
 

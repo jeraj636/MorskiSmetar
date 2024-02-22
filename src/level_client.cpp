@@ -55,6 +55,7 @@ void Level_client::zanka()
             std::cout << seme << "\n";
             srand(seme);
             Level::zacetek();
+            m_jasek.pozicija = mat::vec2(-100, -100);
             m_sem_zacel = true;
             m_vegovec2.nastavi(&m_zemljevid);
             m_kdaj_zelim_vegovec_poz = Cas::get_time() + 0.01;
@@ -213,53 +214,6 @@ void Level_client::zanka()
         {
             m_grete[tab[1]]->smrt();
         }
-        else if (tab[0] == 20)
-        {
-            log::msg("S: POSILJAM JUDI VEL");
-            std::cout << m_judi.size() << "  " << (int)tab[1] << std::endl;
-            if (m_judi.size() < tab[0])
-                while (m_judi.size() != tab[1])
-                {
-                    m_judi.push_back(new Objekt_jud);
-                    m_judi.back()->nastavi(&m_zemljevid, mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 64) + 32, rand() % ((int)Risalnik::get_velikost_okna().y - 64) + 32));
-                }
-            else if (m_judi.size() > tab[0])
-                while (m_judi.size() != tab[1])
-                {
-                    delete m_judi.back();
-                    m_judi.pop_back();
-                }
-        }
-        else if (tab[0] == 21)
-        {
-            int i = tab[1];
-            void *tmp = tab;
-            tmp = (char *)tmp + 2;
-            memcpy(&m_judi[i]->pozicija.x, tmp, 4);
-
-            tmp = (char *)tmp + 4;
-            memcpy(&m_judi[i]->pozicija.y, tmp, 4);
-
-            tmp = (char *)tmp + 4;
-            memcpy(&m_judi[i]->m_smer.x, tmp, 4);
-
-            tmp = (char *)tmp + 4;
-            memcpy(&m_judi[i]->m_smer.y, tmp, 4);
-
-            tmp = (char *)tmp + 4;
-            memcpy(&m_judi[i]->ali_zivim, tmp, 1);
-
-            tmp = (char *)tmp + 1;
-            memcpy(&m_judi[i]->sem_pokopan, tmp, 1);
-
-            tmp = (char *)tmp + 1;
-            memcpy(&m_judi[i]->m_naslednji_cas, tmp, 8);
-            log::msg("S: POSILJAM JUDE");
-        }
-        else if (tab[0] == 22)
-        {
-            m_judi[tab[1]]->smrt();
-        }
         else if (tab[0] == 127)
         {
             log::msg("S: SIGNAL ZA USTAVITAV");
@@ -282,7 +236,7 @@ void Level_client::zanka()
         if (m_kdaj_zelim_crnce <= Cas::get_time())
         {
             // std::cout << m_vegovec2.pozicija;
-            m_kdaj_zelim_crnce += 0.1;
+            m_kdaj_zelim_crnce += .1;
             char tab[1];
             tab[0] = 6;
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -291,7 +245,7 @@ void Level_client::zanka()
         if (m_kdaj_zelim_smeti <= Cas::get_time())
         {
             // std::cout << m_vegovec2.pozicija;
-            m_kdaj_zelim_smeti += 0.2;
+            m_kdaj_zelim_smeti += .1;
             char tab[1];
             tab[0] = 11;
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -300,19 +254,9 @@ void Level_client::zanka()
         if (m_kdaj_zelim_grete <= Cas::get_time())
         {
             // std::cout << m_vegovec2.pozicija;
-            m_kdaj_zelim_grete += 0.1;
+            m_kdaj_zelim_grete += .1;
             char tab[1];
             tab[0] = 15;
-            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
-            log::msg("C: ZELIM CRNC POZ");
-        }
-
-        if (m_kdaj_zelim_jude <= Cas::get_time())
-        {
-            // std::cout << m_vegovec2.pozicija;
-            m_kdaj_zelim_jude += 0.03;
-            char tab[1];
-            tab[0] = 19;
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             log::msg("C: ZELIM CRNC POZ");
         }
@@ -323,7 +267,7 @@ void Level_client::zanka()
         m_ura.narisi_me();
         m_tocke_obj.narisi_me();
 
-        m_jasek.narisi_me();
+        // m_jasek.narisi_me();
 
         m_je_se_kaksen_crn = false;
         for (int i = 0; i < m_crnci.size(); i++)
@@ -371,6 +315,12 @@ void Level_client::zanka()
                 delete m_smeti.back();
                 m_smeti.pop_back();
                 m_tocke++;
+                /*
+                    char tab[2];
+                    tab[0] = 14;
+                    tab[1] = t;
+                    m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+                */
             }
             m_grete[i]->narisi_me();
             if (m_vegovec2.trk(*m_grete[i]) && Risalnik::get_tipko_tipkovnice(' ') && m_grete[i]->ali_zivim)
@@ -381,23 +331,6 @@ void Level_client::zanka()
                 tab[0] = 18;
                 tab[1] = i;
                 m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
-            }
-        }
-
-        for (int i = 0; i < m_judi.size(); i++)
-        {
-            m_judi[i]->update(m_jasek, m_cekini);
-            m_judi[i]->narisi_me();
-            if (m_judi[i]->ali_zivim)
-            {
-                if (m_judi[i]->sem_lahko_ubit() && m_vegovec2.trk(*m_judi[i]) && Risalnik::get_tipko_tipkovnice(' '))
-                {
-                    m_judi[i]->smrt();
-                    char tab[2];
-                    tab[0] = 22;
-                    tab[1] = i;
-                    m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
-                }
             }
         }
 
@@ -412,28 +345,6 @@ void Level_client::zanka()
                 delete m_smeti.back();
                 m_smeti.pop_back();
                 m_tocke += 5;
-            }
-        }
-
-        for (int i = 0; i < m_cekini.size(); i++)
-        {
-            m_cekini[i]->narisi_me();
-            if (m_vegovec2.trk(*m_cekini[i]))
-            {
-                if (!konec_igre())
-                    m_tocke += 20;
-                std::swap(m_cekini[i], m_cekini.back());
-                delete m_cekini.back();
-                m_cekini.pop_back();
-                break;
-            }
-
-            if (m_cekini[i]->ttl <= Cas::get_time())
-            {
-                std::swap(m_cekini[i], m_cekini.back());
-                delete m_cekini.back();
-                m_cekini.pop_back();
-                break;
             }
         }
 
@@ -484,11 +395,6 @@ void Level_client::zanka()
             }
         }
 
-        if (m_st_judov < m_st_judov_const) // preverjanje števeila judov
-        {
-            m_jasek.naredi_juda(m_judi, &m_zemljevid);
-            m_st_judov++;
-        }
         m_vegovec2.update(m_jasek);
         m_vegovec2.narisi_me();
         Risalnik::narisi_niz(m_pisava, 0xffffffff, 0, 50, 500, "client");

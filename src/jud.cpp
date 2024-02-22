@@ -16,7 +16,7 @@ void Objekt_jud::init()
     m_grob_tekstura = Risalnik::nalozi_teksturo("nagrobnik.png");
     m_duh_tekstura = Risalnik::nalozi_teksturo("duh_jud.png");
 }
-
+// Re di denari
 void Objekt_jud::nastavi(CelicniAvtomat *zemljevid, const mat::vec2 &poz)
 {
     m_zemljevid = zemljevid;
@@ -94,25 +94,24 @@ void Objekt_jud::update(Objekt_jasek &jasek, std::vector<Objekt_cekin *> &cekini
             trenutna_animacija = 1;
         }
     }
-
+    if (ali_zivim && m_naslednji_cas <= Cas::get_time())
+    {
+        cekini.push_back(new Objekt_cekin);
+        cekini.back()->nastavi(pozicija);
+        // m_naslednji_cas = rand() % 10 + Cas::get_time();
+    }
     if (pozicija.x < 20 || pozicija.x > Risalnik::get_velikost_okna().x - 20 || pozicija.y < 20 || pozicija.y > Risalnik::get_velikost_okna().y - 20 || m_naslednji_cas <= Cas::get_time())
     {
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         rand_smer();
-        m_naslednji_cas = Cas::get_time() + rand() % 10;
+        if (m_naslednji_cas <= Cas::get_time())
+            m_naslednji_cas = Cas::get_time() + rand() % 10 + 2;
     }
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
 
     if ((velikost.x > 0 && m_smer.x > 0) || (velikost.x < 0 && m_smer.x < 0))
         velikost.x *= -1;
-    if (ali_zivim)
-        if (m_naslednji_cas <= Cas::get_time())
-        {
-            cekini.push_back(new Objekt_cekin);
-            cekini.back()->nastavi(pozicija);
-            m_naslednji_cas = rand() % 10 + Cas::get_time();
-        }
 }
 void Objekt_jud::rand_smer()
 {

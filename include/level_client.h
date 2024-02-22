@@ -31,5 +31,6 @@ private:
     double m_kdaj_zelim_smeti;
     double m_kdaj_zelim_grete;
     double m_kdaj_zelim_jude;
+    double m_kdaj_zelim_cekine;
 };
 #endif

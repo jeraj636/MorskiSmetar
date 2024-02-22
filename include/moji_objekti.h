@@ -188,7 +188,7 @@ class Objekt_cekin : public Objekt
 public:
     static void init();
     void nastavi(const mat::vec2 &poz);
-    uint32_t ttl;
+    double ttl;
 
 private:
     inline static uint32_t m_tek_id;
