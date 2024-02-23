@@ -11,6 +11,15 @@ int main()
     Risalnik::barva_odzadja = 0x0000ffff;
     Risalnik::sredstva_pot = "../../sredstva";
 
+    Objekt_vegovec2::init();
+    Objekt_vegovec::init();
+    Objekt_crnc::init();
+    Objekt_smeti::init();
+    Objekt_greta::init();
+    Objekt_jasek::init();
+    Objekt_jud::init();
+    Objekt_cekin::init();
+
     Muzika::init();
 
     Level level;

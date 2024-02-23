@@ -1,21 +1,21 @@
 #include "../include/level_streznik.h"
 #include <iostream>
+
 Level_streznik::Level_streznik()
     : Level(),
       m_vticnik(m_io_kontekst)
 {
-    Objekt_vegovec2::init();
 }
 void Level_streznik::zacetek()
 {
+    Risalnik::aktivna_scena = this;
+
     m_vticnik = asio::ip::udp::socket(m_io_kontekst, asio::ip::udp::endpoint(asio::ip::udp::v4(), 8080));
 
     log::msg("STREZNIK");
-    Risalnik::aktivna_scena = this;
+
     m_sem_zacel = false;
     m_sem_povezan = false;
-    // Cas::nastavi_staticen_delta_time(true, 0.03);
-    //  m_naslednje_posiljanje = Cas::get_time() + 0.1f;
 }
 /*
 mea culpa
@@ -136,15 +136,12 @@ void Level_streznik::zanka()
             tmp = (char *)tmp + 1;
             memcpy(tmp, &i, 4);
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
-            std::cout << "tukaj1" << std::endl;
             for (int i = 0; i < m_smeti.size(); i++)
             {
                 tab[0] = 13;
                 tmp = tab;
                 tmp = (char *)tmp + 1;
                 memcpy(tmp, &i, 4);
-                std::cout << i << m_smeti.size() << "\n";
-                // std::cout << i << "\n";
 
                 tmp = (char *)tmp + 4;
                 memcpy(tmp, &m_smeti[i]->pozicija.x, 4);

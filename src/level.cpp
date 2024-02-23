@@ -3,13 +3,6 @@
 #include <thread>
 Level::Level()
 {
-    Objekt_vegovec::init();
-    Objekt_crnc::init();
-    Objekt_smeti::init();
-    Objekt_greta::init();
-    Objekt_jasek::init();
-    Objekt_jud::init();
-    Objekt_cekin::init();
 
     m_pisava = Risalnik::nalozi_font("FixedDays.ttf", 40);
     m_ploscice_tekstura = Risalnik::nalozi_teksturo("ploscica.png");
@@ -253,7 +246,7 @@ void Level::konec()
     m_izhod_gumb.unici();
     m_zemljevid.Unici();
     m_muzika.stop();
-
+    m_pisava.unici();
     for (int i = 0; i < m_crnci.size(); i++)
     {
 

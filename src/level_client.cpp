@@ -1,24 +1,26 @@
 #include "../include/level_client.h"
 #include <fstream>
+
 Level_client::Level_client()
     : Level(),
       m_razresevalnik(m_io_kontekst),
       m_vticnik(m_io_kontekst)
 {
-    Objekt_vegovec2::init();
 }
 void Level_client::zacetek()
 {
     Risalnik::aktivna_scena = this;
+
     std::ifstream datoteka("../../sredstva/server.txt");
     if (!datoteka)
         log::err("NI DATOTEKE");
+
     std::string ip_streznika;
     std::getline(datoteka, ip_streznika);
     log::msg("IP STREZNIKA: " + ip_streznika);
-    // std::cout << ip_streznika << "\n";
+
     m_koncna_tocka = *m_razresevalnik.resolve(asio::ip::udp::v4(), ip_streznika, "8080").begin();
-    // Cas::nastavi_staticen_delta_time(true);
+
     m_vticnik.open(asio::ip::udp::v4());
     m_vticnik.send_to(asio::buffer("\0"), m_koncna_tocka);
     log::msg("CLIENT");
@@ -126,12 +128,10 @@ void Level_client::zanka()
         else if (tab[0] == 12)
         {
             int i = m_smeti.size();
-            std::cout << "tu1" << std::endl;
             int k;
             void *tmp = tab;
             tmp = (char *)tmp + 1;
             memcpy(&k, tmp, 4);
-            std::cout << k << "  " << i << std::endl;
             if (i < k)
             {
                 while (m_smeti.size() != i)
@@ -148,18 +148,14 @@ void Level_client::zanka()
                     m_smeti.pop_back();
                 }
             }
-            std::cout << "tu2" << std::endl;
         }
         else if (tab[0] == 13)
         {
 
-            std::cout << "tlele1" << std::endl;
             void *tmp = tab;
             int i;
             tmp = (char *)tmp + 1;
             memcpy(&i, tmp, 4);
-            std::cout << i << "   " << m_smeti.size() << std::endl;
-            std::cout << "tlele1,5" << std::endl;
             if (i < m_smeti.size())
             {
 
@@ -180,7 +176,8 @@ void Level_client::zanka()
         else if (tab[0] == 16)
         {
             log::msg("S: POSILJAM GRETE VEL");
-            m_grete.resize(tab[1]); //! to terba popraviti kajti ni varno
+            if (tab[1] != m_grete.size())
+                log::err("PREMALO GRET");
         }
         else if (tab[0] == 17)
         {
