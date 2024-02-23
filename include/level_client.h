@@ -25,12 +25,12 @@ private:
     bool m_sem_povezan;
     bool m_sem_zacel;
     Objekt_vegovec2 m_vegovec2;
-
+    bool m_imam_ip;
+    std::string m_ip_streznika;
     double m_kdaj_zelim_vegovec_poz;
     double m_kdaj_zelim_crnce;
     double m_kdaj_zelim_smeti;
     double m_kdaj_zelim_grete;
-    double m_kdaj_zelim_jude;
-    double m_kdaj_zelim_cekine;
+    double m_kdaj_zelim_tocke;
 };
 #endif

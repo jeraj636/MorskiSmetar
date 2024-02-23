@@ -22,6 +22,9 @@ private:
 
     Zvok m_glasba;
 
+    std::string m_vpisan_igralec;
+    bool m_sem_vpisan;
+
     Objekt m_igraj_gumb;
     Objekt m_izhod_gumb;
     Objekt m_server_gumb;

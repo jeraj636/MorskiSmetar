@@ -205,6 +205,17 @@ void Level_streznik::zanka()
         {
             m_grete[tab[1]]->smrt();
         }
+        else if (tab[0] == 19)
+        {
+            tab[0] = 20;
+            void *tmp = tab;
+            tmp = (char *)tmp + 1;
+            memcpy(tmp, &m_tocke, 4);
+            tmp = (char *)tmp + 4;
+            memcpy(tmp, &m_next_tocke_odboj, 8);
+
+            m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
+        }
 
         else if (tab[0] == 127)
         {
