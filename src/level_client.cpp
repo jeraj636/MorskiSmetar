@@ -232,7 +232,7 @@ void Level_client::zanka()
             if (m_kdaj_zelim_crnce <= Cas::get_time())
             {
                 // std::cout << m_vegovec2.pozicija;
-                m_kdaj_zelim_crnce += .02;
+                m_kdaj_zelim_crnce += .08;
                 char tab[1];
                 tab[0] = 6;
                 m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -241,7 +241,7 @@ void Level_client::zanka()
             if (m_kdaj_zelim_smeti <= Cas::get_time())
             {
                 // std::cout << m_vegovec2.pozicija;
-                m_kdaj_zelim_smeti += .05;
+                m_kdaj_zelim_smeti += .09;
                 char tab[1];
                 tab[0] = 11;
                 m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -250,7 +250,7 @@ void Level_client::zanka()
             if (m_kdaj_zelim_grete <= Cas::get_time())
             {
                 // std::cout << m_vegovec2.pozicija;
-                m_kdaj_zelim_grete += .06;
+                m_kdaj_zelim_grete += .09;
                 char tab[1];
                 tab[0] = 15;
                 m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -396,7 +396,7 @@ void Level_client::zanka()
                     {
                         m_tocke -= rand() % m_tocke / 2 + m_tocke / 6;
                     }
-                    // m_next_tocke_odboj = Cas::get_time() + rand() % 10;
+                    m_next_tocke_odboj = Cas::get_time() + rand() % 10;
                 }
             }
 
@@ -409,7 +409,6 @@ void Level_client::zanka()
     {
         Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "vpisi ip streznika");
         Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_ip_streznika);
-
         if (Risalnik::get_tipko_tipkovnice(257))
         {
             m_ip_streznika.pop_back();
