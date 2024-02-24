@@ -36,33 +36,31 @@ void Level_streznik::zanka()
             log::msg("C: POZZ SERVER");
 
             m_sem_povezan = true;
+
             tab[0] = 1;
             double t = Cas::get_time();
             memcpy(&tab[1], &t, 8);
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka, 0, ignorirana_napaka);
+
             log::msg("S: POZZ CLIENT");
         }
         else if (tab[0] == 2)
         {
             log::msg("C: ZELIM SEME");
             log::msg("S: POSLJEM SEME");
+
             uint32_t seme = rand() % 0xffffffff;
-            srand(seme);
-            Level::zacetek();
+
             m_jasek.pozicija = mat::vec2(-100, -100);
-            std::cout << seme << "\n";
+
             tab[0] = 3;
-            int i = 2;
-            while (seme >= 1)
-            {
-                tab[i] = seme % 10;
-                i++;
-                seme /= 10;
-            }
-            i -= 2;
-            tab[1] = i;
+            memcpy(&tab[1], &seme, 4);
+
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             m_sem_zacel = true;
+
+            srand(seme);
+            Level::zacetek();
             m_vegovec2.nastavi(&m_zemljevid);
             m_kdaj_zelim_vegovec_poz = Cas::get_time() + 0.01;
         }
@@ -70,11 +68,10 @@ void Level_streznik::zanka()
         {
 
             tab[0] = 5;
-            void *tmp = tab;
-            tmp = (char *)tmp + 1;
-            memcpy(tmp, &m_vegovec.pozicija.x, 4);
-            tmp = (char *)tmp + 4;
-            memcpy(tmp, &m_vegovec.pozicija.y, 4);
+
+            memcpy(&tab[1], &m_vegovec.pozicija.x, 4);
+            memcpy(&tab[5], &m_vegovec.pozicija.y, 4);
+
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             log::msg("C: ZELIM VEGOVEC POZICIJO");
             log::msg("S: POSILJAM VEGOVEC POZICIJO");
@@ -82,11 +79,8 @@ void Level_streznik::zanka()
         else if (tab[0] == 5)
         {
 
-            void *tmp = tab;
-            tmp = (char *)tmp + 1;
-            memcpy(&m_vegovec2.pozicija.x, tmp, 4);
-            tmp = (char *)tmp + 4;
-            memcpy(&m_vegovec2.pozicija.y, tmp, 4);
+            memcpy(&m_vegovec2.pozicija.x, &tab[1], 4);
+            memcpy(&m_vegovec2.pozicija.y, &tab[5], 4);
             log::msg("C: POSILJAM VEGOVEC POZICIJO");
         }
         else if (tab[0] == 6)
@@ -266,7 +260,6 @@ void Level_streznik::zanka()
         m_otoki.narisi_me();
         m_ura.narisi_me();
         m_tocke_obj.narisi_me();
-        Risalnik::narisi_niz(m_pisava, 0xffffffff, 0, 200, 400, std::to_string(Cas::get_time()));
 
         m_je_se_kaksen_crn = false;
         for (int i = 0; i < m_crnci.size(); i++)
@@ -342,13 +335,14 @@ void Level_streznik::zanka()
         m_vegovec.update(m_jasek);
         m_vegovec.narisi_me();
 
+        m_vegovec2.update_o(m_jasek);
+        m_vegovec2.narisi_me();
+
         Risalnik::narisi_niz(m_pisava, 0x000000ff, 0, mat::vec2(70, Risalnik::get_velikost_okna().y - 115), 500, std::to_string(m_tocke));
 
         if (Risalnik::get_tipko_tipkovnice('R'))
         {
             konec();
-            zacetna->zacetek();
-            Risalnik::aktivna_scena = zacetna;
         }
 
         if (konec_igre()) // konec igre
@@ -385,9 +379,7 @@ void Level_streznik::zanka()
             }
         }
 
-        m_vegovec2.update_o(m_jasek);
-        m_vegovec2.narisi_me();
-        Risalnik::narisi_niz(m_pisava, 0xffffffff, 0, 50, 500, "streznik");
+        Risalnik::narisi_niz(m_pisava, 0xffffffff, 0, 50, 500, "STREZNIK");
     }
 }
 
