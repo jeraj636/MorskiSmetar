@@ -442,5 +442,5 @@ void Level_client::konec()
     m_sem_povezan = false;
     m_vticnik.close();
     Level::konec();
-    zacetna->zacetek();
+    // zacetna->zacetek();
 }

@@ -2,6 +2,7 @@
 #define LEVEL_STREZNIK
 #include <thread>
 #include "level.h"
+#include "../include/zacetna.h"
 #define ASIO_STANDALONE
 #define ASIO_HAS_STD_ADDRESSOF
 #define ASIO_HAS_STD_ARRAY

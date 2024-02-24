@@ -1,6 +1,7 @@
 #ifndef LEVEL_CLIENT
 #define LEVEL_CLIENT
 #include "../include/level.h"
+#include "../include/zacetna.h"
 #define ASIO_STANDALONE
 #define ASIO_HAS_STD_ADDRESSOF
 #define ASIO_HAS_STD_ARRAY

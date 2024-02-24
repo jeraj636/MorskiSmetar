@@ -1,4 +1,6 @@
 #include "../include/zacetna.h"
+#include <fstream>
+#include <sstream>
 Zacetna::Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena)
 {
     m_level_scena = level_scena;
@@ -7,12 +9,15 @@ Zacetna::Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena)
 
     m_sem_vpisan = false;
     m_glasba = Risalnik::nalozi_zvok("zvok/theme.mp3");
-    Risalnik::trenutni_buffer_za_vpisovanje = &m_vpisan_igralec;
+
+    m_vpisan_igralec.tocke = 0;
+
+    Risalnik::trenutni_buffer_za_vpisovanje = &m_vpisan_igralec.ime;
 }
 void Zacetna::zacetek()
 {
     m_font = Risalnik::nalozi_font("FixedDays.ttf", 40);
-
+    // samo za testiranje
     m_zemljevid_tek_id = Risalnik::nalozi_teksturo("ploscica.png");
     m_zemljevid.Naredi(240, 135, time(NULL));
     m_obala.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '.', m_zemljevid_tek_id, 0xfbe790ff);
@@ -82,6 +87,7 @@ void Zacetna::zanka()
                 m_izhod_gumb.barva_objekta.set_a(0x55);
                 if (Risalnik::get_miskin_gumb() == Gumb::levi)
                 {
+                    konec();
                     Risalnik::konec();
                 }
             }
@@ -119,29 +125,94 @@ void Zacetna::zanka()
             }
         }
         Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "Morski smetar");
-        Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_vpisan_igralec);
+        Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_vpisan_igralec.ime + "  " + std::to_string(m_vpisan_igralec.tocke));
+
+        for (int i = 0; i < 5; i++)
+        {
+
+            std::string s = m_igralci[i].ime;
+            s = s + "  ";
+            s = s + std::to_string(m_igralci[i].tocke);
+            Risalnik::narisi_niz(m_font, 0xffffffff, 0, mat::vec2(1500, 400 - i * 50), 600, s);
+        }
     }
     else
     {
         m_obala.narisi_me();
         m_otoki.narisi_me();
         Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "vpisi ime igralca");
-        Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_vpisan_igralec);
+        Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_vpisan_igralec.ime);
         if (Risalnik::get_tipko_tipkovnice(257))
         {
             m_sem_vpisan = true;
+
             Risalnik::trenutni_buffer_za_vpisovanje = nullptr;
-            m_vpisan_igralec.pop_back();
+            m_vpisan_igralec.ime.pop_back();
+
+            std::ifstream datoteka("../../sredstva/podatki_o_igralcih.txt");
+            std::string s;
+            int i = 0;
+            while (std::getline(datoteka, s) && i < 5)
+            {
+                std::stringstream str(s);
+                str >> m_igralci[i].ime;
+                str >> m_igralci[i].tocke;
+                if (m_igralci[i].ime == m_vpisan_igralec.ime)
+                {
+                    m_vpisan_igralec.tocke = m_igralci[i].tocke;
+                }
+                i++;
+            }
         }
     }
 }
 
 void Zacetna::konec()
 {
+    std::ofstream datoteka("../../sredstva/podatki_o_igralcih.txt", std::ios::trunc);
+    for (int i = 0; i < 5; i++)
+    {
+        datoteka << m_igralci[i].ime << "  " << m_igralci[i].tocke << std::endl;
+    }
+
+    datoteka.close();
+
     m_glasba.stop();
 
     m_obala.unici();
     m_otoki.unici();
     m_igraj_gumb.unici();
     m_izhod_gumb.unici();
+}
+void Zacetna::posodobi_igralca(int tocke)
+{
+    m_vpisan_igralec.tocke += tocke;
+    bool sem_notri = false;
+    for (int i = 0; i < 5; i++)
+        if (m_igralci[i].ime == m_vpisan_igralec.ime)
+        {
+            m_igralci[i].tocke += tocke;
+            for (int j = i; j >= 1 && m_vpisan_igralec.tocke >= m_igralci[j - 1].tocke; j--)
+            {
+                Igralec i = m_igralci[j];
+                m_igralci[j] = m_igralci[j - 1];
+                m_igralci[j - 1] = i;
+            }
+            sem_notri = true;
+            break;
+        }
+    if (!sem_notri)
+        for (int i = 0; i < 5; i++)
+        {
+
+            if (m_vpisan_igralec.tocke > m_igralci[i].tocke)
+            {
+                for (int j = 4; j > i; j--)
+                {
+                    m_igralci[j] = m_igralci[j - 1];
+                }
+                m_igralci[i] = m_vpisan_igralec;
+                break;
+            }
+        }
 }

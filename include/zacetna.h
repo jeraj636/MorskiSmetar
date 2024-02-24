@@ -2,6 +2,11 @@
 #define ZACETNA_H
 #include <henigma_engine.h>
 #include <CelicniAvtomat.h>
+struct Igralec
+{
+    std::string ime = "";
+    uint32_t tocke = 0;
+};
 class Zacetna : public Scena
 {
 public:
@@ -9,6 +14,7 @@ public:
     void zacetek() override;
     void zanka() override;
     void konec() override;
+    void posodobi_igralca(int tocke);
 
 private:
     Font m_font;
@@ -22,7 +28,9 @@ private:
 
     Zvok m_glasba;
 
-    std::string m_vpisan_igralec;
+    Igralec m_vpisan_igralec;
+    Igralec m_igralci[5];
+
     bool m_sem_vpisan;
 
     Objekt m_igraj_gumb;

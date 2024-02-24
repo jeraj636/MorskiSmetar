@@ -5,7 +5,7 @@
 #include <CelicniAvtomat.h>
 
 #include "../include/moji_objekti.h"
-
+class Zacetna;
 class Level : public Scena
 {
 public:
@@ -13,7 +13,7 @@ public:
     void zacetek() override;
     void zanka() override;
     void konec() override;
-    Scena *zacetna;
+    Zacetna *zacetna;
 
 protected:
     CelicniAvtomat m_zemljevid;

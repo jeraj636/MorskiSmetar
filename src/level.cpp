@@ -1,4 +1,5 @@
 #include "../include/level.h"
+#include "../include/zacetna.h"
 #include <chrono>
 #include <thread>
 Level::Level()
@@ -194,8 +195,8 @@ void Level::zanka()
     if (Risalnik::get_tipko_tipkovnice('R'))
     {
         konec();
-        zacetna->zacetek();
-        Risalnik::aktivna_scena = zacetna;
+        // zacetna->zacetek();
+        // Risalnik::aktivna_scena = zacetna;
     }
 
     if (konec_igre()) // konec igre
@@ -282,6 +283,8 @@ void Level::konec()
     m_crnci = std::vector<Objekt_crnc *>{};
     m_grete = std::vector<Objekt_greta *>{};
     m_judi = std::vector<Objekt_jud *>{};
+    zacetna->posodobi_igralca(m_tocke);
+    zacetna->zacetek();
 }
 
 bool Level::konec_igre()
