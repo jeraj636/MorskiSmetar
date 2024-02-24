@@ -1,5 +1,5 @@
+TWSGDSD  80
+MOJCA  7
 JAKOB  3
-  0
-  0
-  0
-  0
+0  0
+0  0

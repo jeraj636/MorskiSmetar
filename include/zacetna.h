@@ -37,6 +37,7 @@ private:
     Objekt m_izhod_gumb;
     Objekt m_server_gumb;
     Objekt m_client_gumb;
+    Objekt m_zamenjaj_ime_gumb;
 
     Scena *m_level_scena;
     Scena *m_client_scena;

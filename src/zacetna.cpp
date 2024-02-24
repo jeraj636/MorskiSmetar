@@ -36,8 +36,11 @@ void Zacetna::zacetek()
     m_client_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2 + 110, 600), mat::vec2(100, 100), 180, 0xffffffff, 0);
     m_client_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/omrezje.png");
 
-    m_izhod_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
+    m_izhod_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2 - 110, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
     m_izhod_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
+
+    m_zamenjaj_ime_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2 + 110, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
+    m_zamenjaj_ime_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/zamenjaj_ime.png");
 
     m_igraj_gumb.aktiven = true;
     m_izhod_gumb.aktiven = true;
@@ -54,10 +57,10 @@ void Zacetna::zanka()
     {
 
         m_igraj_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 - 110;
-        m_izhod_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2;
+        m_izhod_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 - 60;
         m_server_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2;
         m_client_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 + 110;
-
+        m_zamenjaj_ime_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 + 60;
         m_obala.narisi_me();
         m_otoki.narisi_me();
 
@@ -65,6 +68,7 @@ void Zacetna::zanka()
         m_izhod_gumb.narisi_me();
         m_server_gumb.narisi_me();
         m_client_gumb.narisi_me();
+        m_zamenjaj_ime_gumb.narisi_me();
         if (m_zac_time <= Cas::get_time())
         {
 
@@ -123,6 +127,21 @@ void Zacetna::zanka()
             {
                 m_client_gumb.barva_objekta.set_a(0xff);
             }
+            if (m_zamenjaj_ime_gumb.je_miska_gor())
+            {
+                m_zamenjaj_ime_gumb.barva_objekta.set_a(0x55);
+                if (Risalnik::get_miskin_gumb() == Gumb::levi)
+                {
+                    m_sem_vpisan = false;
+                    m_vpisan_igralec.tocke = 0;
+                    m_vpisan_igralec.ime = "";
+                    Risalnik::trenutni_buffer_za_vpisovanje = &m_vpisan_igralec.ime;
+                }
+            }
+            else
+            {
+                m_zamenjaj_ime_gumb.barva_objekta.set_a(0xff);
+            }
         }
         Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "Morski smetar");
         Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_vpisan_igralec.ime + "  " + std::to_string(m_vpisan_igralec.tocke));
@@ -179,10 +198,14 @@ void Zacetna::konec()
 
     m_glasba.stop();
 
+    m_font.unici();
     m_obala.unici();
     m_otoki.unici();
     m_igraj_gumb.unici();
     m_izhod_gumb.unici();
+    m_server_gumb.unici();
+    m_client_gumb.unici();
+    m_zamenjaj_ime_gumb.unici();
 }
 void Zacetna::posodobi_igralca(int tocke)
 {
