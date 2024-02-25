@@ -236,3 +236,38 @@ bool Objekt_vegovec2::sem_lahko_udarjen()
 {
     return (m_nazadnje_udarjen + 3 <= Cas::get_time());
 }
+
+void Objekt_vegovec2::unici()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_udarec_tek_id[i]);
+        Risalnik::skenslaj_teksturo(&m_plavanje_udraec_tek_id[i]);
+    }
+    for (int i = 0; i < 2; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_plavanje_tek_id[i]);
+        Risalnik::skenslaj_teksturo(&m_idle_tek_id[i]);
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_hoja_tek_id[i]);
+    }
+}
+void Objekt_vegovec::unici()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_udarec_tek_id[i]);
+        Risalnik::skenslaj_teksturo(&m_plavanje_udraec_tek_id[i]);
+    }
+    for (int i = 0; i < 2; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_plavanje_tek_id[i]);
+        Risalnik::skenslaj_teksturo(&m_idle_tek_id[i]);
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_hoja_tek_id[i]);
+    }
+}

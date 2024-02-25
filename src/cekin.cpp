@@ -15,3 +15,8 @@ void Objekt_cekin::nastavi(const mat::vec2 &poz)
     barva_odzadja = 0;
     ttl = Cas::get_time() + 5;
 }
+
+void Objekt_cekin::unici()
+{
+    Risalnik::skenslaj_teksturo(&m_tek_id);
+}

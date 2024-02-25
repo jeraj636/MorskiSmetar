@@ -165,3 +165,15 @@ void Objekt_crnc::trk_s_crnim()
     m_mocni_ucinek_time = Cas::get_time() + 5;
     sem_mocan = true;
 }
+void Objekt_crnc::unici()
+{
+    for (int i = 0; i < 2; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_idle_tek_id[i]);
+        Risalnik::skenslaj_teksturo(&m_plavanje_tek_id[i]);
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_hoja_tek_id[i]);
+    }
+}

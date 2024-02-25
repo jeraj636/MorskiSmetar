@@ -24,6 +24,7 @@ public:
     void trk_s_crnim();
     friend class Level_streznik;
     friend class Level_client;
+    static void unici();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
@@ -55,6 +56,7 @@ public:
     void konec();
     void udarjen();
     bool sem_lahko_udarjen();
+    static void unici();
 
 protected:
     static inline uint32_t m_idle_tek_id[2];
@@ -81,6 +83,7 @@ public:
     void nastavi(CelicniAvtomat *zemljeveid, mat::vec2 poz);
     void update();
     // static void unici();
+    static void unici();
 
 private:
     static inline uint32_t m_smeti_tek;
@@ -113,6 +116,7 @@ public:
     void smrt();
     friend class Level_streznik;
     friend class Level_client;
+    static void unici();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
@@ -141,6 +145,7 @@ public:
     void nastavi();
     static void init();
     void naredi_juda(std::vector<Objekt_jud *> &judi, CelicniAvtomat *zemljevid);
+    static void unici();
 
 private:
     uint32_t m_nex_time;
@@ -162,6 +167,7 @@ public:
     bool sem_lahko_ubit();
     friend class Level_streznik;
     friend class Level_client;
+    static void unici();
 
 private:
     static inline uint32_t m_idle_tek_id[2];
@@ -189,6 +195,7 @@ public:
     static void init();
     void nastavi(const mat::vec2 &poz);
     double ttl;
+    static void unici();
 
 private:
     inline static uint32_t m_tek_id;
@@ -203,6 +210,7 @@ public:
     void konec();
     void udarjen();
     bool sem_lahko_udarjen();
+    static void unici();
 
 protected:
     static inline uint32_t m_idle_tek_id[2];

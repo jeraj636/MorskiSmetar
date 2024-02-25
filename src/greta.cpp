@@ -178,3 +178,15 @@ void Objekt_greta::smrt()
         velikost = mat::vec2(24, 48); //*Mea maxima culpa
     }
 }
+void Objekt_greta::unici()
+{
+    for (int i = 0; i < 2; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_idle_tek_id[i]);
+        Risalnik::skenslaj_teksturo(&m_plavanje_tek_id[i]);
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        Risalnik::skenslaj_teksturo(&m_hoja_tek_id[i]);
+    }
+}

@@ -25,3 +25,7 @@ void Objekt_jasek::naredi_juda(std::vector<Objekt_jud *> &judi, CelicniAvtomat *
     judi.push_back(new Objekt_jud);
     judi.back()->nastavi(zemljevid, pozicija);
 }
+void Objekt_jasek::unici()
+{
+    Risalnik::skenslaj_teksturo(&m_tek_id);
+}

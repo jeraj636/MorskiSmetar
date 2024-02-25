@@ -48,3 +48,7 @@ bool Objekt_smeti::sem_zunaj()
 {
     return (pozicija.x <= 0 || pozicija.x >= Risalnik::get_velikost_okna().x || pozicija.y <= 0 || pozicija.y >= Risalnik::get_velikost_okna().y);
 }
+void Objekt_smeti::unici()
+{
+    Risalnik::skenslaj_teksturo(&m_smeti_tek);
+}

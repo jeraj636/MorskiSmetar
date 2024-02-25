@@ -41,5 +41,14 @@ int main()
         Risalnik::aktivna_scena->zanka();
         Risalnik::konec_okvir();
     }
+
+    Objekt_vegovec2::unici();
+    Objekt_vegovec::unici();
+    Objekt_crnc::unici();
+    Objekt_smeti::unici();
+    Objekt_greta::unici();
+    Objekt_jasek::unici();
+    Objekt_jud::unici();
+    Objekt_cekin::unici();
     Risalnik::konec();
 }
