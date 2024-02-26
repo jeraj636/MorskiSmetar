@@ -141,9 +141,8 @@ void Level_streznik::zanka()
 
             tab[0] = 12;
             int i = m_smeti.size();
-            void *tmp = tab;
-            tmp = (char *)tmp + 1;
-            memcpy(tmp, &i, 4);
+
+            memcpy(&tab[1], &i, 4);
             m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
             log::msg("S: POSILJAM VEL SMETI");
             for (int i = 0; i < m_smeti.size(); i++)

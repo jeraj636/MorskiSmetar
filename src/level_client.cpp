@@ -249,7 +249,7 @@ void Level_client::zanka()
             if (m_kdaj_zelim_crnce <= Cas::get_time())
             {
                 // std::cout << m_vegovec2.pozicija;
-                m_kdaj_zelim_crnce += .07;
+                m_kdaj_zelim_crnce += .05;
                 char tab[1];
                 tab[0] = 6;
                 m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -258,7 +258,7 @@ void Level_client::zanka()
             if (m_kdaj_zelim_smeti <= Cas::get_time())
             {
                 // std::cout << m_vegovec2.pozicija;
-                m_kdaj_zelim_smeti += .07;
+                m_kdaj_zelim_smeti += .05;
                 char tab[1];
                 tab[0] = 11;
                 m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -267,7 +267,7 @@ void Level_client::zanka()
             if (m_kdaj_zelim_grete <= Cas::get_time())
             {
                 // std::cout << m_vegovec2.pozicija;
-                m_kdaj_zelim_grete += .07;
+                m_kdaj_zelim_grete += .06;
                 char tab[1];
                 tab[0] = 15;
                 m_vticnik.send_to(asio::buffer(tab), m_koncna_tocka);
@@ -366,7 +366,7 @@ void Level_client::zanka()
                 m_smeti[i]->update();
                 m_smeti[i]->narisi_me();
 
-                if (m_vegovec2.trk(*m_smeti[i]))
+                if (m_vegovec2.trk(*m_smeti[i]) || m_vegovec.trk(*m_smeti[i]))
                 {
                     std::swap(m_smeti[i], m_smeti.back());
                     delete m_smeti.back();
