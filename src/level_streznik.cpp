@@ -1,6 +1,11 @@
 #include "../include/level_streznik.h"
 #include <iostream>
 
+/*
+Pred uporabo natančno preberite navodilo!
+O tveganju in neželenih učinkih se posvetujte
+z zdravnikom ali s farmacevtom.
+*/
 Level_streznik::Level_streznik()
     : Level(),
       m_vticnik(m_io_kontekst)
@@ -243,7 +248,9 @@ void Level_streznik::zanka()
             konec();
         }
     }
-
+    /*
+    Ko bi ne bil delal napak v preteklosti, bi .....
+    */
     if (m_sem_zacel && m_sem_povezan)
     {
         if (m_kdaj_zelim_vegovec_poz <= Cas::get_time())

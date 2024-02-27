@@ -59,6 +59,7 @@ void Objekt_jud::nastavi(CelicniAvtomat *zemljevid, const mat::vec2 &poz)
 }
 void Objekt_jud::update(Objekt_jasek &jasek, std::vector<Objekt_cekin *> &cekini)
 {
+    // shema izrael
     if (!ali_zivim && sem_pokopan)
         return;
 

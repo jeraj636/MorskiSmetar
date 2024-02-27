@@ -216,6 +216,7 @@ void Level_client::zanka()
             {
                 m_grete[tab[1]]->smrt();
                 log::msg("S: UBIL SEM GRETO");
+                /*Lux æterna luceat eis, Domine*/
             }
 
             else if (tab[0] == 20)

@@ -287,6 +287,7 @@ void Level::konec()
     zacetna->zacetek();
 }
 
+// šala helsinškaaaaaaaaaaaaaaaaaaaaa
 bool Level::konec_igre()
 {
     return (!m_je_se_kaksen_crn && m_smeti.size() == 0);

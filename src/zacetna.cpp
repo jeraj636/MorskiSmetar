@@ -16,6 +16,9 @@ Zacetna::Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena)
 }
 void Zacetna::zacetek()
 {
+    /*
+    v začetku je bila baseda
+    */
     m_font = Risalnik::nalozi_font("FixedDays.ttf", 40);
     // samo za testiranje
     m_zemljevid_tek_id = Risalnik::nalozi_teksturo("ploscica.png");
