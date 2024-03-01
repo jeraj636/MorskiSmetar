@@ -419,7 +419,6 @@ void Level_client::zanka()
         Risalnik::narisi_niz(m_pisava, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_ip_streznika);
         if (Risalnik::get_tipko_tipkovnice(257))
         {
-            m_ip_streznika.pop_back();
             m_koncna_tocka = *m_razresevalnik.resolve(asio::ip::udp::v4(), m_ip_streznika, "8080").begin();
             Risalnik::trenutni_buffer_za_vpisovanje = nullptr;
 

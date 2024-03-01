@@ -169,7 +169,7 @@ void Zacetna::zanka()
             m_sem_vpisan = true;
 
             Risalnik::trenutni_buffer_za_vpisovanje = nullptr;
-            m_vpisan_igralec.ime.pop_back();
+            // m_vpisan_igralec.ime.pop_back();
 
             std::ifstream datoteka("../../sredstva/podatki_o_igralcih.txt");
             std::string s;

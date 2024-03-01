@@ -1,5 +1,5 @@
-JAKOB  157
-0  0
+JAKOB  172
+JAKBO  35
 0  0
 0  0
 0  0

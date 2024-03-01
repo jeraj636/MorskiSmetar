@@ -191,12 +191,14 @@ void Objekt_vegovec2::update_o(Objekt_jasek &jasek)
                 else
                     trenutna_animacija = 1;
             }
-            if (pozicija.x < 0 || pozicija.x >= Risalnik::get_velikost_okna().x || pozicija.y < 0 || pozicija.y > Risalnik::get_velikost_okna().y - 20)
-            {
-
-                pozicija = mat::vec2(pozicija.x + m_hitrost * -m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
-                pozicija = mat::vec2(pozicija.x + m_hitrost * -m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
-            }
+            if (pozicija.x < 0)
+                pozicija.x = 0;
+            if (pozicija.x > Risalnik::get_velikost_okna().x)
+                pozicija.x = Risalnik::get_velikost_okna().x;
+            if (pozicija.y < 0)
+                pozicija.y = 0;
+            if (pozicija.y > Risalnik::get_velikost_okna().y - 10)
+                pozicija.y = Risalnik::get_velikost_okna().y - 10;
         }
     }
 }
