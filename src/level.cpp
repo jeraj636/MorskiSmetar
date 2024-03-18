@@ -201,8 +201,6 @@ void Level::zanka()
     if (Risalnik::get_tipko_tipkovnice('R'))
     {
         konec();
-        // zacetna->zacetek();
-        // Risalnik::aktivna_scena = zacetna;
     }
 
     if (konec_igre()) // konec igre
@@ -215,8 +213,6 @@ void Level::zanka()
             if (Risalnik::get_miskin_gumb() == Gumb::levi)
             {
                 konec();
-                zacetna->zacetek();
-                Risalnik::aktivna_scena = zacetna;
             }
         }
         else

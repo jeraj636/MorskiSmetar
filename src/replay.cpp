@@ -62,6 +62,10 @@ void Replay::zanka()
             m_izhod_gumb.barva_objekta.set_a(0xff);
         }
     }
+    if (Risalnik::get_tipko_tipkovnice('R'))
+    {
+        konec();
+    }
 }
 
 void Replay::konec()
@@ -72,4 +76,5 @@ void Replay::konec()
     m_zemljevid.Unici();
     m_muzika.stop();
     m_pisava.unici();
+    zacetna->zacetek();
 }

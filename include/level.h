@@ -5,7 +5,7 @@
 #include <CelicniAvtomat.h>
 #include <fstream>
 #include "../include/moji_objekti.h"
-#include "okvir.h"
+
 class Zacetna;
 
 class Level : public Scena

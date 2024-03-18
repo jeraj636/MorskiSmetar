@@ -4,7 +4,7 @@
 #include <CelicniAvtomat.h>
 #include "moji_objekti.h"
 #include <fstream>
-#include "okvir.h"
+
 class Zacetna;
 class Replay : public Scena
 {
