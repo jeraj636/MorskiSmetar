@@ -3,9 +3,11 @@
 
 #include <henigma_engine.h>
 #include <CelicniAvtomat.h>
-
+#include <fstream>
 #include "../include/moji_objekti.h"
+#include "okvir.h"
 class Zacetna;
+
 class Level : public Scena
 {
 public:
@@ -50,6 +52,10 @@ protected:
 
 protected:
     bool konec_igre();
+
+private:
+    uint32_t m_naslednj_okvir_cas;
+    std::ofstream o_dat;
 };
 
 #endif

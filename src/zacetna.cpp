@@ -1,11 +1,12 @@
 #include "../include/zacetna.h"
 #include <fstream>
 #include <sstream>
-Zacetna::Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena)
+Zacetna::Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena, Scena *replay_scena)
 {
     m_level_scena = level_scena;
     m_server_scena = server_scena;
     m_client_scena = client_scena;
+    m_replay_scena = replay_scena;
 
     m_sem_vpisan = false;
     m_glasba = Risalnik::nalozi_zvok("zvok/theme.mp3");
@@ -45,6 +46,9 @@ void Zacetna::zacetek()
     m_zamenjaj_ime_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2 + 110, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
     m_zamenjaj_ime_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/zamenjaj_ime.png");
 
+    m_replay_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2 - 110, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
+    m_replay_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/zamenjaj_ime.png");
+
     m_igraj_gumb.aktiven = true;
     m_izhod_gumb.aktiven = true;
     m_server_gumb.aktiven = true;
@@ -72,6 +76,7 @@ void Zacetna::zanka()
         m_server_gumb.narisi_me();
         m_client_gumb.narisi_me();
         m_zamenjaj_ime_gumb.narisi_me();
+        m_replay_gumb.narisi_me();
         if (m_zac_time <= Cas::get_time())
         {
 
@@ -80,9 +85,9 @@ void Zacetna::zanka()
                 m_igraj_gumb.barva_objekta.set_a(0x55);
                 if (Risalnik::get_miskin_gumb() == Gumb::levi)
                 {
+                    konec();
                     m_level_scena->zacetek();
                     // Risalnik::aktivna_scena = m_level_scena;
-                    konec();
                 }
             }
             else
@@ -107,9 +112,9 @@ void Zacetna::zanka()
                 m_server_gumb.barva_objekta.set_a(0x55);
                 if (Risalnik::get_miskin_gumb() == Gumb::levi)
                 {
+                    konec();
                     m_server_scena->zacetek();
                     // Risalnik::aktivna_scena = m_server_scena;
-                    konec();
                 }
             }
             else
@@ -121,9 +126,9 @@ void Zacetna::zanka()
                 m_client_gumb.barva_objekta.set_a(0x55);
                 if (Risalnik::get_miskin_gumb() == Gumb::levi)
                 {
+                    konec();
                     m_client_scena->zacetek();
                     // Risalnik::aktivna_scena = m_client_scena;
-                    konec();
                 }
             }
             else
@@ -144,6 +149,19 @@ void Zacetna::zanka()
             else
             {
                 m_zamenjaj_ime_gumb.barva_objekta.set_a(0xff);
+            }
+            if (m_replay_gumb.je_miska_gor())
+            {
+                m_replay_gumb.barva_objekta.set_a(0x55);
+                if (Risalnik::get_miskin_gumb() == Gumb::levi)
+                {
+                    konec();
+                    m_replay_scena->zacetek();
+                }
+            }
+            else
+            {
+                m_replay_gumb.barva_objekta.set_a(0xff);
             }
         }
         Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "Morski smetar");

@@ -10,7 +10,7 @@ struct Igralec
 class Zacetna : public Scena
 {
 public:
-    Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena);
+    Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena, Scena *replay_scena);
     void zacetek() override;
     void zanka() override;
     void konec() override;
@@ -38,10 +38,12 @@ private:
     Objekt m_server_gumb;
     Objekt m_client_gumb;
     Objekt m_zamenjaj_ime_gumb;
+    Objekt m_replay_gumb;
 
     Scena *m_level_scena;
     Scena *m_client_scena;
     Scena *m_server_scena;
+    Scena *m_replay_scena;
 
     uint32_t m_zac_time;
 };

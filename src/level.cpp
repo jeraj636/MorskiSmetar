@@ -2,6 +2,7 @@
 #include "../include/zacetna.h"
 #include <chrono>
 #include <thread>
+#include <fstream>
 Level::Level()
 {
 
@@ -17,7 +18,11 @@ void Level::zacetek()
 {
     Risalnik::aktivna_scena = this;
     m_izhod_gumb_tek = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
-    m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, rand() % 0xffffffff);
+    o_dat.open("../../sredstva/replay.ms", std::ios::binary);
+    uint32_t seme = rand() % 0xffffffff;
+    o_dat.write((char *)&seme, sizeof(uint32_t));
+
+    m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, seme);
 
     m_ura.nastavi(mat::vec2(32, 32), mat::vec2(32, 50), 180, 0xffffffff, 0);
     m_ura.id_teksture = m_ura_tek;
@@ -66,6 +71,7 @@ void Level::zacetek()
         m_judi.push_back(new Objekt_jud);
         m_judi.back()->nastavi(&m_zemljevid, mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 64) + 32, rand() % ((int)Risalnik::get_velikost_okna().y - 64) + 32));
     }
+    m_naslednj_okvir_cas = Cas::get_time() + 0.05;
 }
 void Level::zanka()
 {
@@ -238,11 +244,16 @@ void Level::zanka()
         m_jasek.naredi_juda(m_judi, &m_zemljevid);
         m_st_judov++;
     }
+
+    if (!konec_igre() && m_naslednj_okvir_cas <= Cas::get_time())
+    {
+        o_dat.write((char *)&m_vegovec.pozicija, sizeof(mat::vec2));
+    }
 }
 
 void Level::konec()
 {
-
+    o_dat.close();
     m_vegovec.animacije = std::vector<Animacija>{};
     m_izhod_gumb.unici();
     m_zemljevid.Unici();

@@ -22,6 +22,7 @@ src/cekin.cpp
 src/level_streznik.cpp
 src/level_client.cpp
 src/vegovec2.cpp
+src/replay.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
