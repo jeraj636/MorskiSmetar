@@ -64,10 +64,11 @@ void Zacetna::zanka()
     {
 
         m_igraj_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 - 110;
-        m_izhod_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 - 60;
+        m_izhod_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2;
         m_server_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2;
         m_client_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 + 110;
-        m_zamenjaj_ime_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 + 60;
+        m_zamenjaj_ime_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 + 110;
+        m_replay_gumb.pozicija.x = Risalnik::get_velikost_okna().x / 2 - 110;
         m_obala.narisi_me();
         m_otoki.narisi_me();
 
@@ -189,7 +190,7 @@ void Zacetna::zanka()
             Risalnik::trenutni_buffer_za_vpisovanje = nullptr;
             // m_vpisan_igralec.ime.pop_back();
 
-            std::ifstream datoteka("../../sredstva/podatki_o_igralcih.txt");
+            std::ifstream datoteka("../sredstva/podatki_o_igralcih.txt");
             std::string s;
             int i = 0;
             while (std::getline(datoteka, s) && i < 5)
@@ -209,7 +210,7 @@ void Zacetna::zanka()
 
 void Zacetna::konec()
 {
-    std::ofstream datoteka("../../sredstva/podatki_o_igralcih.txt", std::ios::trunc);
+    std::ofstream datoteka("../sredstva/podatki_o_igralcih.txt", std::ios::trunc);
     for (int i = 0; i < 5; i++)
     {
         datoteka << m_igralci[i].ime << "  " << m_igralci[i].tocke << std::endl;

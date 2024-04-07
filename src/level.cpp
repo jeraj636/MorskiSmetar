@@ -18,11 +18,12 @@ void Level::zacetek()
 {
     Risalnik::aktivna_scena = this;
     m_izhod_gumb_tek = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
-    o_dat.open("../../sredstva/replay.ms", std::ios::binary);
+    o_dat.open("../sredstva/replay.ms", std::ios::binary);
     uint32_t seme = rand() % 0xffffffff;
     o_dat.write((char *)&seme, sizeof(uint32_t));
-
+    std::cout << seme << "\n";
     m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, seme);
+    m_jasek.nastavi();
 
     m_ura.nastavi(mat::vec2(32, 32), mat::vec2(32, 50), 180, 0xffffffff, 0);
     m_ura.id_teksture = m_ura_tek;
@@ -63,7 +64,6 @@ void Level::zacetek()
     }
     m_next_tocke_odboj = Cas::get_time() + 5;
 
-    m_jasek.nastavi();
     n = rand() % 2 + 3;
     m_st_judov_const = m_st_judov = n;
     for (int i = 0; i < n; i++)

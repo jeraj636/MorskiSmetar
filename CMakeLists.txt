@@ -33,4 +33,5 @@ lib/asio/include
 
 target_link_libraries(${PROJECT_NAME}
 HenigmaEngine
+ws2_32
 )

@@ -12,10 +12,12 @@ void Replay::zacetek()
 
     m_izhod_tek = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
     uint32_t seme;
-    i_dat.open("../../sredstva/replay.ms", std::ios::binary);
+    i_dat.open("../sredstva/replay.ms", std::ios::binary);
     i_dat.read((char *)&seme, sizeof(uint32_t));
+    std::cout << seme << "\n";
 
     m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, seme);
+    m_jasek.nastavi();
 
     m_izhod_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2, 600), mat::vec2(100, 100), 180, 0xffffffff, 0);
     m_izhod_gumb.id_teksture = m_izhod_tek;
@@ -24,11 +26,11 @@ void Replay::zacetek()
     m_otoki.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '0', m_ploscice_tekstura, 0x03ac13ff);
 
     m_vegovec.nastavi(&m_zemljevid);
-    m_jasek.nastavi();
     m_muzika.zacetek();
     m_muzika.nastavi_loop(true);
     m_muzika.predvajaj();
     m_naslednj_bralni_cas = Cas::get_time() + 0.05;
+    m_ali_predvajam = true;
 }
 
 void Replay::zanka()
@@ -39,6 +41,7 @@ void Replay::zanka()
     if (m_ali_predvajam && m_naslednj_bralni_cas <= Cas::get_time())
     {
         m_naslednj_bralni_cas = Cas::get_time() + 0.05;
+        std::cout << "beresm\n";
         if (!i_dat.read((char *)&m_vegovec.pozicija, sizeof(mat::vec2)))
             m_ali_predvajam = false;
     }
