@@ -254,7 +254,7 @@ void Level::konec()
     m_izhod_gumb.unici();
     m_zemljevid.Unici();
     m_muzika.stop();
-    m_pisava.unici();
+    // m_pisava.unici();
     for (int i = 0; i < m_crnci.size(); i++)
     {
 
