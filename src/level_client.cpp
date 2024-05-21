@@ -50,6 +50,7 @@ void Level_client::zanka()
 
                 srand(seme);
                 Level::zacetek();
+                Objekt_crnc::multiplay = true;
                 m_jasek.pozicija = mat::vec2(-100, -100);
                 m_sem_zacel = true;
                 m_vegovec2.nastavi(&m_zemljevid);
@@ -296,7 +297,7 @@ void Level_client::zanka()
             m_je_se_kaksen_crn = false;
             for (int i = 0; i < m_crnci.size(); i++)
             {
-                m_crnci[i]->update(m_smeti, m_jasek);
+                m_crnci[i]->update(m_smeti, m_jasek, m_vegovec);
                 m_crnci[i]->narisi_me();
 
                 if (m_crnci[i]->ali_zivim)

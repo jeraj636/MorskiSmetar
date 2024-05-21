@@ -66,6 +66,7 @@ void Level_streznik::zanka()
 
             srand(seme);
             Level::zacetek();
+            Objekt_crnc::multiplay = true;
             m_vegovec2.nastavi(&m_zemljevid);
             m_kdaj_zelim_vegovec_poz = Cas::get_time() + 0.01;
         }
@@ -270,7 +271,7 @@ void Level_streznik::zanka()
         m_je_se_kaksen_crn = false;
         for (int i = 0; i < m_crnci.size(); i++)
         {
-            m_crnci[i]->update(m_smeti, m_jasek);
+            m_crnci[i]->update(m_smeti, m_jasek, m_vegovec);
             m_crnci[i]->narisi_me();
 
             if (m_crnci[i]->ali_zivim)

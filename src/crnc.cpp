@@ -58,7 +58,20 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     tmp.naslednja_animacija = 4;
     animacije.push_back(tmp);
 }
-
+bool daj_v_mere(float x1, float x2, float &x)
+{
+    if (x < x1)
+    {
+        x = x1;
+        return true;
+    }
+    if (x > x2)
+    {
+        x = x2;
+        return true;
+    }
+    return false;
+}
 void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek, Objekt_vegovec &vegovc)
 {
     if (sem_mocan && m_mocni_ucinek_time <= Cas::get_time())
@@ -105,24 +118,45 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek
         }
     }
 
-    if (pozicija.x <= 20 || pozicija.x >= Risalnik::get_velikost_okna().x - 20 || pozicija.y <= 20 || pozicija.y >= Risalnik::get_velikost_okna().y - 20 || m_naslednji_cas <= Cas::get_time())
+    /*
+        if (pozicija.x <= 20 || pozicija.x >= Risalnik::get_velikost_okna().x - 20 || pozicija.y <= 20 || pozicija.y >= Risalnik::get_velikost_okna().y - 20)
+        {
+            pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
+            pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
+            pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
+            pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
+            rand_smer();
+            m_naslednji_cas = Cas::get_time() + rand() % 10;
+        }
+    */
+    if (m_naslednji_cas <= Cas::get_time() || daj_v_mere(20, Risalnik::get_velikost_okna().x - 20, pozicija.x) || daj_v_mere(20, Risalnik::get_velikost_okna().y - 20, pozicija.y))
     {
-        pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
-        pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
-        pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
-        pozicija = mat::vec2(pozicija.x + -m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + -m_hitrost * m_smer.y * Cas::get_delta_time());
         rand_smer();
         m_naslednji_cas = Cas::get_time() + rand() % 10;
-        /*
-        if (ali_zivim)
-        {
-            smece.push_back(new Objekt_smeti);
-            smece.back()->nastavi(m_zemljevid, pozicija);
-            smece.back()->update();
-        }
-        */
     }
-    // if()
+    float razdalja_do_voguca = sqrt(pow((pozicija.x - vegovc.pozicija.x), 2) + pow((pozicija.y - vegovc.pozicija.y), 2));
+
+    if (razdalja_do_voguca < rand() % 200 + 50 && !multiplay && ali_zivim)
+    {
+        m_smer = vegovc.pozicija;
+        m_smer.x -= pozicija.x;
+        m_smer.y -= pozicija.y;
+        float dol = sqrt(m_smer.x * m_smer.x + m_smer.y * m_smer.y);
+        m_smer.x /= dol;
+        m_smer.y /= dol;
+        m_hitrost = 100;
+    }
+    if (razdalja_do_voguca < rand() % (130 - 40) + 40 && ali_zivim)
+    {
+        m_smer.x *= -1;
+        m_smer.y *= -1;
+        m_hitrost = 260;
+    }
+    else
+    {
+        m_hitrost = 150;
+    }
+
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
 
     if ((velikost.x > 0 && m_smer.x > 0) || (velikost.x < 0 && m_smer.x < 0))
@@ -163,7 +197,7 @@ void Objekt_crnc::rand_smer()
 }
 void Objekt_crnc::trk_s_crnim()
 {
-    m_mocni_ucinek_time = Cas::get_time() + 5;
+    m_mocni_ucinek_time = Cas::get_time() + 2;
     sem_mocan = true;
 }
 void Objekt_crnc::unici()

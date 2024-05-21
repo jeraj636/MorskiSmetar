@@ -43,6 +43,7 @@ void Level::zacetek()
     m_muzika.nastavi_loop(true);
     m_muzika.predvajaj();
 
+    Objekt_crnc::multiplay = false;
     int n = rand() % 3 + 5;
     for (int i = 0; i < n; i++)
     {
@@ -85,7 +86,7 @@ void Level::zanka()
     m_je_se_kaksen_crn = false;
     for (int i = 0; i < m_crnci.size(); i++)
     {
-        m_crnci[i]->update(m_smeti, m_jasek);
+        m_crnci[i]->update(m_smeti, m_jasek, m_vegovec);
         m_crnci[i]->narisi_me();
 
         if (m_crnci[i]->ali_zivim)

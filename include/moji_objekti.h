@@ -10,7 +10,7 @@ class Objekt_smeti;
 class Objekt_jasek;
 class Objekt_cekin;
 class Objekt_jud;
-
+class Objekt_vegovec;
 class Objekt_crnc : public Objekt_anim
 {
 public:
@@ -25,6 +25,7 @@ public:
     friend class Level_streznik;
     friend class Level_client;
     static void unici();
+    static inline bool multiplay;
 
 private:
     static inline uint32_t m_idle_tek_id[2];
