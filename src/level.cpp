@@ -21,7 +21,7 @@ void Level::zacetek()
     o_dat.open("../sredstva/replay.ms", std::ios::binary);
     uint32_t seme = rand() % 0xffffffff;
     o_dat.write((char *)&seme, sizeof(uint32_t));
-    std::cout << seme << "\n";
+    // std::cout << seme << "\n";
     m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, seme);
     m_jasek.nastavi();
 

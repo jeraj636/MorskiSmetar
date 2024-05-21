@@ -14,7 +14,6 @@ void Replay::zacetek()
     uint32_t seme;
     i_dat.open("../sredstva/replay.ms", std::ios::binary);
     i_dat.read((char *)&seme, sizeof(uint32_t));
-    std::cout << seme << "\n";
 
     m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, seme);
     m_jasek.nastavi();
@@ -41,7 +40,6 @@ void Replay::zanka()
     if (m_ali_predvajam && m_naslednj_bralni_cas <= Cas::get_time())
     {
         m_naslednj_bralni_cas = Cas::get_time() + 0.05;
-        std::cout << "beresm\n";
         if (!i_dat.read((char *)&m_vegovec.pozicija, sizeof(mat::vec2)))
             m_ali_predvajam = false;
     }

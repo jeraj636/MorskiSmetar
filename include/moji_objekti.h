@@ -16,7 +16,7 @@ class Objekt_crnc : public Objekt_anim
 public:
     static void init();
     void nastavi(CelicniAvtomat *zemljeveid);
-    void update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jaski);
+    void update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jaski, Objekt_vegovec &vegovc);
     bool ali_zivim;
     bool sem_pokopan;
     bool sem_mocan;

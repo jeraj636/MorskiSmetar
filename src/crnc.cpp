@@ -59,7 +59,7 @@ void Objekt_crnc::nastavi(CelicniAvtomat *zemljevid)
     animacije.push_back(tmp);
 }
 
-void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek)
+void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek, Objekt_vegovec &vegovc)
 {
     if (sem_mocan && m_mocni_ucinek_time <= Cas::get_time())
     {
@@ -122,6 +122,7 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek
         }
         */
     }
+    // if()
     pozicija = mat::vec2(pozicija.x + m_hitrost * m_smer.x * Cas::get_delta_time(), pozicija.y + m_hitrost * m_smer.y * Cas::get_delta_time());
 
     if ((velikost.x > 0 && m_smer.x > 0) || (velikost.x < 0 && m_smer.x < 0))
