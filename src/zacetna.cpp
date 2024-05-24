@@ -1,13 +1,13 @@
 #include "../include/zacetna.h"
 #include <fstream>
 #include <sstream>
-Zacetna::Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena, Scena *replay_scena)
+Zacetna::Zacetna(Scena *level_scena, Scena *client_scena, Scena *server_scena, Scena *replay_scena, Scena *igraj_od_prej)
 {
     m_level_scena = level_scena;
     m_server_scena = server_scena;
     m_client_scena = client_scena;
     m_replay_scena = replay_scena;
-
+    m_igraj_od_prej_scena = igraj_od_prej;
     m_sem_vpisan = false;
     m_glasba = Risalnik::nalozi_zvok("zvok/theme.mp3");
 
@@ -49,10 +49,14 @@ void Zacetna::zacetek()
     m_replay_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2 - 110, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
     m_replay_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/zamenjaj_ime.png");
 
+    m_igraj_od_prej_gumb.nastavi(mat::vec2(Risalnik::get_velikost_okna().x / 2 - 220, 800), mat::vec2(100, 100), 0, 0xffffffff, 0);
+    m_igraj_od_prej_gumb.id_teksture = Risalnik::nalozi_teksturo("ui/zamenjaj_ime.png");
+
     m_igraj_gumb.aktiven = true;
     m_izhod_gumb.aktiven = true;
     m_server_gumb.aktiven = true;
     m_client_gumb.aktiven = true;
+    m_igraj_od_prej_gumb.aktiven = true;
 
     m_zac_time = Cas::get_time() + 1;
     Risalnik::aktivna_scena = this;
@@ -78,6 +82,7 @@ void Zacetna::zanka()
         m_client_gumb.narisi_me();
         m_zamenjaj_ime_gumb.narisi_me();
         m_replay_gumb.narisi_me();
+        m_igraj_od_prej_gumb.narisi_me();
         if (m_zac_time <= Cas::get_time())
         {
 
@@ -164,6 +169,19 @@ void Zacetna::zanka()
             {
                 m_replay_gumb.barva_objekta.set_a(0xff);
             }
+            if (m_igraj_od_prej_gumb.je_miska_gor())
+            {
+                m_igraj_od_prej_gumb.barva_objekta.set_a(0x55);
+                if (Risalnik::get_miskin_gumb() == Gumb::levi)
+                {
+                    konec();
+                    m_igraj_od_prej_scena->zacetek();
+                }
+            }
+            else
+            {
+                m_igraj_od_prej_gumb.barva_objekta.set_a(0xff);
+            }
         }
         Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 400, 400, "Morski smetar");
         Risalnik::narisi_niz(m_font, Barva(0xffffffff), Barva(0), Risalnik::get_velikost_okna().y - 500, 400, m_vpisan_igralec.ime + "  " + std::to_string(m_vpisan_igralec.tocke));
@@ -210,13 +228,6 @@ void Zacetna::zanka()
 
 void Zacetna::konec()
 {
-    std::ofstream datoteka("../sredstva/podatki_o_igralcih.txt", std::ios::trunc);
-    for (int i = 0; i < 5; i++)
-    {
-        datoteka << m_igralci[i].ime << "  " << m_igralci[i].tocke << std::endl;
-    }
-
-    datoteka.close();
 
     m_glasba.stop();
 
@@ -231,33 +242,55 @@ void Zacetna::konec()
 }
 void Zacetna::posodobi_igralca(int tocke)
 {
+    std::ifstream i_dat("../sredstva/podatki_o_igralcih.txt");
+    std::ofstream datoteka("../sredstva/podatki_o_igralcih.txt.t");
+    std::string ime;
+    int tocke_dat;
+    std::vector<Igralec> igralci;
+    int lines = 0;
     m_vpisan_igralec.tocke += tocke;
-    bool sem_notri = false;
-    for (int i = 0; i < 5; i++)
+    bool sem_vpisal = false;
+    while (i_dat >> ime >> tocke_dat)
+    {
+        if (tocke_dat > m_vpisan_igralec.tocke)
+        {
+            if (ime != m_vpisan_igralec.ime)
+            {
+                datoteka << ime << " " << tocke_dat << "\n";
+            }
+        }
+        else
+        {
+            if (!sem_vpisal)
+            {
+                datoteka << m_vpisan_igralec.ime << " " << m_vpisan_igralec.tocke << "\n";
+                if (ime != m_vpisan_igralec.ime)
+                    datoteka << ime << " " << tocke_dat << "\n";
+
+                sem_vpisal = true;
+            }
+            else if (m_vpisan_igralec.ime != ime)
+                datoteka << ime << " " << tocke_dat << "\n";
+        }
+    }
+
+    i_dat.close();
+    datoteka.close();
+    std::remove("../sredstva/podatki_o_igralcih.txt");
+    std::rename("../sredstva/podatki_o_igralcih.txt.t", "../sredstva/podatki_o_igralcih.txt");
+
+    std::ifstream dat("../sredstva/podatki_o_igralcih.txt");
+    std::string s;
+    int i = 0;
+    while (std::getline(dat, s) && i < 5)
+    {
+        std::stringstream str(s);
+        str >> m_igralci[i].ime;
+        str >> m_igralci[i].tocke;
         if (m_igralci[i].ime == m_vpisan_igralec.ime)
         {
-            m_igralci[i].tocke += tocke;
-            for (int j = i; j >= 1 && m_vpisan_igralec.tocke >= m_igralci[j - 1].tocke; j--)
-            {
-                Igralec i = m_igralci[j];
-                m_igralci[j] = m_igralci[j - 1];
-                m_igralci[j - 1] = i;
-            }
-            sem_notri = true;
-            break;
+            m_vpisan_igralec.tocke = m_igralci[i].tocke;
         }
-    if (!sem_notri)
-        for (int i = 0; i < 5; i++)
-        {
-
-            if (m_vpisan_igralec.tocke > m_igralci[i].tocke)
-            {
-                for (int j = 4; j > i; j--)
-                {
-                    m_igralci[j] = m_igralci[j - 1];
-                }
-                m_igralci[i] = m_vpisan_igralec;
-                break;
-            }
-        }
+        i++;
+    }
 }

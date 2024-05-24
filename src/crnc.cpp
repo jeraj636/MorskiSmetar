@@ -136,7 +136,7 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek
     }
     float razdalja_do_voguca = sqrt(pow((pozicija.x - vegovc.pozicija.x), 2) + pow((pozicija.y - vegovc.pozicija.y), 2));
 
-    if (razdalja_do_voguca < rand() % 200 + 50 && !multiplay && ali_zivim)
+    if (razdalja_do_voguca < 150 && !multiplay && ali_zivim)
     {
         m_smer = vegovc.pozicija;
         m_smer.x -= pozicija.x;
@@ -144,16 +144,17 @@ void Objekt_crnc::update(std::vector<Objekt_smeti *> &smece, Objekt_jasek &jasek
         float dol = sqrt(m_smer.x * m_smer.x + m_smer.y * m_smer.y);
         m_smer.x /= dol;
         m_smer.y /= dol;
-        m_hitrost = 100;
-    }
-    if (razdalja_do_voguca < rand() % (130 - 40) + 40 && ali_zivim)
-    {
-        m_smer.x *= -1;
-        m_smer.y *= -1;
-        m_hitrost = 260;
+        m_hitrost = 150;
+        if (!sem_mocan)
+        {
+            m_smer.x *= -1;
+            m_smer.y *= -1;
+            m_hitrost = 160;
+        }
     }
     else
     {
+
         m_hitrost = 150;
     }
 
@@ -197,7 +198,7 @@ void Objekt_crnc::rand_smer()
 }
 void Objekt_crnc::trk_s_crnim()
 {
-    m_mocni_ucinek_time = Cas::get_time() + 2;
+    m_mocni_ucinek_time = Cas::get_time() + 10;
     sem_mocan = true;
 }
 void Objekt_crnc::unici()

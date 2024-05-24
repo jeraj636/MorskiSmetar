@@ -1,11 +1,11 @@
-#include "../include/level.h"
+#include "../include/igraj_od_prej.h"
+// #include "../include/level.h"
 #include "../include/zacetna.h"
 #include <chrono>
 #include <thread>
 #include <fstream>
-Level::Level()
+Igraj_od_prej_level::Igraj_od_prej_level()
 {
-
     m_pisava = Risalnik::nalozi_font("FixedDays.ttf", 40);
     m_ploscice_tekstura = Risalnik::nalozi_teksturo("ploscica.png");
 
@@ -14,12 +14,15 @@ Level::Level()
     m_tocke_tek = Risalnik::nalozi_teksturo("tocke.png");
     m_ura_tek = Risalnik::nalozi_teksturo("ura.png");
 }
-void Level::zacetek()
+
+void Igraj_od_prej_level::zacetek()
 {
+    std::ifstream i_dat("../sredstva/tt.bin", std::ios::binary);
     Risalnik::aktivna_scena = this;
     m_izhod_gumb_tek = Risalnik::nalozi_teksturo("ui/izhod_gumb.png");
     o_dat.open("../sredstva/replay.ms", std::ios::binary);
     seme = rand() % 0xffffffff;
+    i_dat.read((char *)&seme, sizeof(uint32_t));
     o_dat.write((char *)&seme, sizeof(uint32_t));
     // std::cout << seme << "\n";
     m_zemljevid.Naredi(Risalnik::get_velikost_okna().x / 8, Risalnik::get_velikost_okna().y / 8, seme);
@@ -37,53 +40,83 @@ void Level::zacetek()
     m_otoki.nastavi(m_zemljevid.GetTab(), m_zemljevid.GetX(), m_zemljevid.GetY(), '0', m_ploscice_tekstura, 0x03ac13ff);
 
     m_tocke = 0;
+    double t;
+    i_dat.read((char *)&t, sizeof(double));
+    Cas::sin_cas = Cas::get_time() - t;
+
+    i_dat.read((char *)&m_tocke, sizeof(m_tocke));
     m_vegovec.nastavi(&m_zemljevid);
+    i_dat.read((char *)&m_vegovec.pozicija, sizeof(mat::vec2));
 
     m_muzika.zacetek();
     m_muzika.nastavi_loop(true);
     m_muzika.predvajaj();
 
     Objekt_crnc::multiplay = false;
-    int n = rand() % 3 + 5;
+    int n;
+    n = rand() % 2 + 3;
+    i_dat.read((char *)&n, sizeof(int));
     for (int i = 0; i < n; i++)
     {
         m_crnci.push_back(new Objekt_crnc);
         m_crnci.back()->nastavi(&m_zemljevid);
+        i_dat.read((char *)&m_crnci.back()->pozicija, sizeof(mat::vec2));
+        i_dat.read((char *)&m_crnci.back()->sem_mocan, sizeof(bool));
+        i_dat.read((char *)&m_crnci.back()->sem_pokopan, sizeof(bool));
+        i_dat.read((char *)&m_crnci.back()->ali_zivim, sizeof(bool));
     }
-    n = rand() % 3 + 5;
+    n = rand() % 2 + 3;
+    i_dat.read((char *)&n, sizeof(int));
     for (int i = 0; i < n; i++)
     {
         m_smeti.push_back(new Objekt_smeti);
         m_smeti.back()->nastavi(&m_zemljevid, mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x + 40) - 20, rand() % ((int)Risalnik::get_velikost_okna().y + 40) - 20));
+        i_dat.read((char *)&m_smeti.back()->pozicija, sizeof(mat::vec2));
     }
-    n = rand() % 3 + 5;
+    n = rand() % 2 + 3;
+    i_dat.read((char *)&n, sizeof(int));
 
     for (int i = 0; i < n; i++)
     {
         m_grete.push_back(new Objekt_greta);
         m_grete.back()->nastavi(&m_zemljevid, m_smeti);
+        i_dat.read((char *)&m_grete.back()->pozicija, sizeof(mat::vec2));
+        i_dat.read((char *)&m_grete.back()->ali_zivim, sizeof(bool));
+        i_dat.read((char *)&m_grete.back()->sem_pokopan, sizeof(bool));
     }
     m_next_tocke_odboj = Cas::get_time() + 5;
 
     n = rand() % 2 + 3;
+    i_dat.read((char *)&n, sizeof(int));
     m_st_judov_const = m_st_judov = n;
+
     for (int i = 0; i < n; i++)
     {
         m_judi.push_back(new Objekt_jud);
         m_judi.back()->nastavi(&m_zemljevid, mat::vec2(rand() % ((int)Risalnik::get_velikost_okna().x - 64) + 32, rand() % ((int)Risalnik::get_velikost_okna().y - 64) + 32));
+        i_dat.read((char *)&m_judi.back()->pozicija, sizeof(mat::vec2));
+        i_dat.read((char *)&m_judi.back()->ali_zivim, sizeof(bool));
+        i_dat.read((char *)&m_judi.back()->sem_pokopan, sizeof(bool));
     }
     m_naslednj_okvir_cas = Cas::get_time() + 0.05;
+    log::msg("tuka");
+    std::cout << std::endl;
 }
-void Level::zanka()
+
+void Igraj_od_prej_level::zanka()
 {
+    log::msg("zanka");
     m_obala.narisi_me();
     m_otoki.narisi_me();
     m_ura.narisi_me();
     m_tocke_obj.narisi_me();
-
     m_jasek.narisi_me();
 
     m_je_se_kaksen_crn = false;
+    std::cout << m_crnci.size() << std::endl;
+
+    m_crnci[0]->narisi_me();
+
     for (int i = 0; i < m_crnci.size(); i++)
     {
         m_crnci[i]->update(m_smeti, m_jasek, m_vegovec);
@@ -250,9 +283,10 @@ void Level::zanka()
     {
         o_dat.write((char *)&m_vegovec.pozicija, sizeof(mat::vec2));
     }
+    log::msg("zanka konec");
 }
 
-void Level::konec()
+void Igraj_od_prej_level::konec()
 {
     o_dat.close();
     m_vegovec.animacije = std::vector<Animacija>{};
@@ -298,14 +332,12 @@ void Level::konec()
     zacetna->posodobi_igralca(m_tocke);
     zacetna->zacetek();
 }
-
-// šala helsinškaaaaaaaaaaaaaaaaaaaaa
-bool Level::konec_igre()
+bool Igraj_od_prej_level::konec_igre()
 {
     return (!m_je_se_kaksen_crn && m_smeti.size() == 0);
 }
 
-void Level::izhod_v_sili()
+void Igraj_od_prej_level::izhod_v_sili()
 {
     std::ofstream o_dat("../sredstva/tt.bin", std::ios::binary);
     o_dat.write((char *)&seme, sizeof(uint32_t));

@@ -23,6 +23,7 @@ src/level_streznik.cpp
 src/level_client.cpp
 src/vegovec2.cpp
 src/replay.cpp
+src/igraj_od_prej.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

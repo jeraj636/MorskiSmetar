@@ -1,20 +1,20 @@
-#ifndef LEVEL_H
-#define LEVEL_H
+#ifndef IGRAJ_OD_PREJ_H
+#define IGRAJ_OD_PREJ_H
 
 #include <henigma_engine.h>
 #include <CelicniAvtomat.h>
 #include <fstream>
 #include "../include/moji_objekti.h"
-
+#include "level.h"
 class Zacetna;
 
-class Level : public Scena
+class Igraj_od_prej_level : public Scena
 {
 public:
-    Level();
-    void zacetek() override;
-    void zanka() override;
-    void konec() override;
+    Igraj_od_prej_level();
+    void zacetek();
+    void zanka();
+    void konec();
     Zacetna *zacetna;
 
 protected:

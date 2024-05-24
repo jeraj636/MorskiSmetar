@@ -5,6 +5,7 @@
 #include "../include/level_streznik.h"
 #include "../include/level_client.h"
 #include "../include/replay.h"
+#include "../include/igraj_od_prej.h"
 int main()
 {
     Risalnik::init("Morski smetar");
@@ -27,13 +28,15 @@ int main()
     Level_streznik s_level;
     Level_client c_level;
     Replay replay;
-    Zacetna zacetna(&level, &c_level, &s_level, &replay);
+    Igraj_od_prej_level igraj_od_prej;
+    Zacetna zacetna(&level, &c_level, &s_level, &replay, &igraj_od_prej);
     zacetna.zacetek();
 
     replay.zacetna = &zacetna;
     level.zacetna = &zacetna;
     s_level.zacetna = &zacetna;
     c_level.zacetna = &zacetna;
+    igraj_od_prej.zacetna = &zacetna;
 
     Risalnik::aktivna_scena = &zacetna;
 

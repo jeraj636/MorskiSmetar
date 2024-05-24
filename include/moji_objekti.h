@@ -26,12 +26,12 @@ public:
     friend class Level_client;
     static void unici();
     static inline bool multiplay;
+    CelicniAvtomat *m_zemljevid;
 
 private:
     static inline uint32_t m_idle_tek_id[2];
     static inline uint32_t m_hoja_tek_id[4];
     static inline uint32_t m_plavanje_tek_id[2];
-    CelicniAvtomat *m_zemljevid;
     static inline float m_hitrost = 150;
     static inline uint32_t m_grob_tekstura;
     static inline uint32_t m_duh_tekstura;
